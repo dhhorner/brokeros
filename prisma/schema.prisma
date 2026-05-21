@@ -1,0 +1,362 @@
+// This is your Prisma schema file
+// Learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Enums
+// ─────────────────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  BROKER
+  AGENT
+  CLIENT
+}
+
+enum BrokeragePlan {
+  FREE
+  PRO
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  NURTURING
+  CLOSED_WON
+  CLOSED_LOST
+}
+
+enum LeadSource {
+  MANUAL
+  MLS
+  WEBSITE
+  REFERRAL
+  SOCIAL
+  OTHER
+}
+
+enum PropertyStatus {
+  ACTIVE
+  PENDING
+  SOLD
+  EXPIRED
+  WITHDRAWN
+}
+
+enum TransactionStatus {
+  ACTIVE
+  UNDER_CONTRACT
+  PENDING_CLOSE
+  CLOSED
+  CANCELLED
+}
+
+enum PartyRole {
+  AGENT
+  LENDER
+  TITLE
+  ATTORNEY
+}
+
+enum ContingencyType {
+  INSPECTION
+  FINANCING
+  APPRAISAL
+  TITLE
+  SALE_OF_HOME
+  OTHER
+}
+
+enum TaskStatus {
+  OPEN
+  COMPLETED
+}
+
+enum SequenceStatus {
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+enum RiskScore {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Core auth models (NextAuth v5 / Auth.js)
+// ─────────────────────────────────────────────────────────────────────────────
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String    @unique
+  emailVerified DateTime?
+  image         String?
+  role          UserRole  @default(BROKER)
+  brokerageId   String?
+
+  accounts       Account[]
+  sessions       Session[]
+  brokerage      Brokerage?       @relation("BrokerageOwner")
+  brokerageMember Brokerage?      @relation("BrokerageMembers", fields: [brokerageId], references: [id])
+  assignedLeads  Lead[]           @relation("AssignedLeads")
+  assignedTasks  Task[]           @relation("AssignedTasks")
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([brokerageId])
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Brokerage
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Brokerage {
+  id               String        @id @default(cuid())
+  name             String
+  ownerId          String        @unique
+  stripeCustomerId String?
+  plan             BrokeragePlan @default(FREE)
+
+  owner        User           @relation("BrokerageOwner", fields: [ownerId], references: [id])
+  members      User[]         @relation("BrokerageMembers")
+  leads        Lead[]
+  properties   Property[]
+  transactions Transaction[]
+  sequences    NurtureSequence[]
+  tasks        Task[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// LeadOwn
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Lead {
+  id          String     @id @default(cuid())
+  brokerageId String
+  name        String
+  email       String?
+  phone       String?
+  status      LeadStatus @default(NEW)
+  source      LeadSource @default(MANUAL)
+  assignedTo  String?
+  notes       String?    @db.Text
+
+  brokerage Brokerage        @relation(fields: [brokerageId], references: [id])
+  assignee  User?            @relation("AssignedLeads", fields: [assignedTo], references: [id])
+  sequences NurtureSequence[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([brokerageId])
+  @@index([status])
+  @@index([source])
+  @@index([assignedTo])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// MLS / Properties
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Property {
+  id          String         @id @default(cuid())
+  brokerageId String
+  mlsId       String?        @unique
+  address     String
+  price       Decimal        @db.Decimal(12, 2)
+  beds        Int?
+  baths       Decimal?       @db.Decimal(4, 1)
+  sqft        Int?
+  status      PropertyStatus @default(ACTIVE)
+  listedAt    DateTime?
+  rawData     Json?
+
+  brokerage    Brokerage     @relation(fields: [brokerageId], references: [id])
+  transactions Transaction[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([brokerageId])
+  @@index([status])
+  @@index([mlsId])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// DealPulse
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Transaction {
+  id            String            @id @default(cuid())
+  brokerageId   String
+  propertyId    String
+  buyerId       String?
+  sellerId      String?
+  status        TransactionStatus @default(ACTIVE)
+  closeDate     DateTime?
+  purchasePrice Decimal?          @db.Decimal(12, 2)
+  earnestMoney  Decimal?          @db.Decimal(12, 2)
+  riskScore     RiskScore?
+  riskFlags     String[]          @default([])
+
+  brokerage  Brokerage              @relation(fields: [brokerageId], references: [id])
+  property   Property               @relation(fields: [propertyId], references: [id])
+  parties    TransactionParty[]
+  deadlines  ContingencyDeadline[]
+  tasks      Task[]
+  documents  Document[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([brokerageId])
+  @@index([status])
+  @@index([propertyId])
+}
+
+model TransactionParty {
+  id            String    @id @default(cuid())
+  transactionId String
+  role          PartyRole
+  name          String
+  email         String?
+  phone         String?
+
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@index([transactionId])
+}
+
+model ContingencyDeadline {
+  id            String          @id @default(cuid())
+  transactionId String
+  type          ContingencyType
+  dueDate       DateTime
+  completedAt   DateTime?
+  notes         String?         @db.Text
+
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@index([transactionId])
+  @@index([dueDate])
+}
+
+model Task {
+  id            String     @id @default(cuid())
+  transactionId String?
+  brokerageId   String
+  title         String
+  dueDate       DateTime?
+  completedAt   DateTime?
+  assignedTo    String?
+  status        TaskStatus @default(OPEN)
+
+  transaction Transaction? @relation(fields: [transactionId], references: [id], onDelete: SetNull)
+  brokerage   Brokerage    @relation(fields: [brokerageId], references: [id])
+  assignee    User?        @relation("AssignedTasks", fields: [assignedTo], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([brokerageId])
+  @@index([transactionId])
+  @@index([status])
+  @@index([dueDate])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Nurture
+// ─────────────────────────────────────────────────────────────────────────────
+
+model NurtureSequence {
+  id          String         @id @default(cuid())
+  brokerageId String
+  leadId      String
+  status      SequenceStatus @default(ACTIVE)
+  currentStep Int            @default(0)
+  nextSendAt  DateTime?
+
+  brokerage Brokerage @relation(fields: [brokerageId], references: [id])
+  lead      Lead      @relation(fields: [leadId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([brokerageId])
+  @@index([leadId])
+  @@index([status])
+  @@index([nextSendAt])
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Documents
+// ─────────────────────────────────────────────────────────────────────────────
+
+model Document {
+  id            String   @id @default(cuid())
+  transactionId String
+  name          String
+  url           String
+  type          String
+  uploadedAt    DateTime @default(now())
+
+  transaction Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+
+  @@index([transactionId])
+}
