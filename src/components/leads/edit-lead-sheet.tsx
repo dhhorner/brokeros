@@ -76,7 +76,7 @@ export function EditLeadSheet({ leadId, open, onOpenChange }: EditLeadSheetProps
       phone: "",
       status: "NEW",
       source: "MANUAL",
-      assignedTo: "",
+      assignedTo: "__none__",
       notes: "",
     },
   });
@@ -89,7 +89,7 @@ export function EditLeadSheet({ leadId, open, onOpenChange }: EditLeadSheetProps
         phone: lead.phone ?? "",
         status: lead.status,
         source: lead.source,
-        assignedTo: lead.assignedTo ?? "",
+        assignedTo: lead.assignedTo ?? "__none__",
         notes: lead.notes ?? "",
       });
     }
@@ -104,7 +104,7 @@ export function EditLeadSheet({ leadId, open, onOpenChange }: EditLeadSheetProps
       phone: data.phone || undefined,
       status: data.status,
       source: data.source,
-      assignedTo: data.assignedTo || undefined,
+      assignedTo: data.assignedTo === "__none__" ? undefined : data.assignedTo || undefined,
       notes: data.notes || undefined,
     });
   }
@@ -233,7 +233,7 @@ export function EditLeadSheet({ leadId, open, onOpenChange }: EditLeadSheetProps
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        <SelectItem value="">Unassigned</SelectItem>
+                        <SelectItem value="__none__">Unassigned</SelectItem>
                         {members?.map((m) => (
                           <SelectItem key={m.id} value={m.id}>
                             {m.name ?? m.email}

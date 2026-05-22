@@ -70,7 +70,7 @@ export function NewLeadSheet() {
       phone: "",
       status: "NEW",
       source: "MANUAL",
-      assignedTo: "",
+      assignedTo: "__none__",
       notes: "",
     },
   });
@@ -82,7 +82,7 @@ export function NewLeadSheet() {
       phone: data.phone || undefined,
       status: data.status,
       source: data.source,
-      assignedTo: data.assignedTo || undefined,
+      assignedTo: data.assignedTo === "__none__" ? undefined : data.assignedTo || undefined,
       notes: data.notes || undefined,
     });
   }
@@ -215,7 +215,7 @@ export function NewLeadSheet() {
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
-                      <SelectItem value="">Unassigned</SelectItem>
+                      <SelectItem value="__none__">Unassigned</SelectItem>
                       {members?.map((m) => (
                         <SelectItem key={m.id} value={m.id}>
                           {m.name ?? m.email}
