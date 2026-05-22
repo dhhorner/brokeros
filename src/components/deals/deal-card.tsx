@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { RiskBadge } from "./risk-badge";
 import { Card, CardContent } from "@/components/ui/card";
 import { Home, Calendar, Users } from "lucide-react";
@@ -14,6 +15,7 @@ type DealCardProps = {
 };
 
 export function DealCard({
+  id,
   address,
   price,
   closeDate,
@@ -21,7 +23,8 @@ export function DealCard({
   parties,
 }: DealCardProps) {
   return (
-    <Card className="cursor-pointer hover:shadow-md transition-shadow">
+    <Link href={`/dashboard/deals/${id}`} className="block">
+      <Card className="cursor-pointer hover:shadow-md transition-shadow">
       <CardContent className="p-4 space-y-3">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
@@ -56,5 +59,6 @@ export function DealCard({
         )}
       </CardContent>
     </Card>
+    </Link>
   );
 }

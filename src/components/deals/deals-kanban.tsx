@@ -2,6 +2,9 @@
 
 import { trpc } from "@/lib/trpc/client";
 import { DealCard } from "./deal-card";
+import { NewDealSheet } from "./new-deal-sheet";
+import { Button } from "@/components/ui/button";
+import { RefreshCw } from "lucide-react";
 import { TransactionStatus } from "@prisma/client";
 
 const COLUMNS: { status: TransactionStatus; label: string }[] = [
@@ -12,8 +15,13 @@ const COLUMNS: { status: TransactionStatus; label: string }[] = [
 ];
 
 export function DealsKanban() {
+  const utils = trpc.useUtils();
   const { data: deals, isLoading } = trpc.transactions.list.useQuery({
     limit: 100,
+  });
+
+  const runRiskCheck = trpc.transactions.runRiskCheck.useMutation({
+    onSuccess: () => utils.transactions.list.invalidate(),
   });
 
   if (isLoading) {
@@ -35,6 +43,27 @@ export function DealsKanban() {
   }
 
   return (
+    <div className="space-y-4">
+      {/* Toolbar */}
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <Button
+            variant="outline"
+            disabled={runRiskCheck.isPending}
+            onClick={() => runRiskCheck.mutate()}
+          >
+            <RefreshCw className={`h-4 w-4 mr-1.5 ${runRiskCheck.isPending ? "animate-spin" : ""}`} />
+            {runRiskCheck.isPending ? "Checking..." : "Run risk check"}
+          </Button>
+          {runRiskCheck.isSuccess && (
+            <span className="text-xs text-slate-500">
+              ✓ {runRiskCheck.data.checked} deal{runRiskCheck.data.checked !== 1 ? "s" : ""} updated
+            </span>
+          )}
+        </div>
+        <NewDealSheet />
+      </div>
+
     <div className="grid grid-cols-4 gap-4 h-full">
       {COLUMNS.map((col) => {
         const columnDeals = (deals ?? []).filter(
@@ -79,6 +108,7 @@ export function DealsKanban() {
           </div>
         );
       })}
+    </div>
     </div>
   );
 }

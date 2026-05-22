@@ -1,5 +1,6 @@
 import { TaskQueue } from "@/components/flowdesk/task-queue";
 import { AiChat } from "@/components/flowdesk/ai-chat";
+import { DraftEmailSheet } from "@/components/flowdesk/draft-email-sheet";
 import { auth } from "@/lib/auth";
 import { db } from "@/server/db";
 
@@ -20,24 +21,19 @@ export default async function FlowDeskPage() {
 
   return (
     <div className="flex flex-col h-full space-y-4">
-      <div>
-        <h2 className="text-2xl font-bold text-slate-900">FlowDesk</h2>
-        <p className="text-slate-500 mt-1">
-          AI-powered admin assistant for your brokerage.
-        </p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h2 className="text-2xl font-bold text-slate-900">FlowDesk</h2>
+          <p className="text-slate-500 mt-1">
+            AI-powered admin assistant for your brokerage.
+          </p>
+        </div>
+        <DraftEmailSheet />
       </div>
 
       <div className="flex flex-1 gap-4 overflow-hidden rounded-lg border border-slate-200 bg-white min-h-[600px]">
         {/* Left: task queue */}
         <div className="w-[520px] shrink-0 border-r border-slate-200 flex flex-col">
-          <div className="px-4 py-3 border-b border-slate-200">
-            <h3 className="text-sm font-semibold text-slate-700">
-              Open Tasks
-            </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
-              All transactions, sorted by due date
-            </p>
-          </div>
           <div className="flex-1 overflow-hidden">
             <TaskQueue />
           </div>

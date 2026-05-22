@@ -26,8 +26,8 @@ export const env = createEnv({
     UPSTASH_REDIS_REST_TOKEN: z.string().min(1),
     REDIS_URL: z.string().min(1),
 
-    // AI — Anthropic key optional when using Ollama locally
-    ANTHROPIC_API_KEY: z.string().min(1),
+    // AI — optional when using Ollama locally in dev
+    ANTHROPIC_API_KEY: z.string().min(1).optional(),
     OLLAMA_BASE_URL: z.string().url().optional(),
 
     // App

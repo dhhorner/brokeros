@@ -40,6 +40,7 @@ const newLeadFormSchema = z.object({
   phone: z.string().max(20).optional(),
   status: z.enum(["NEW", "CONTACTED", "QUALIFIED", "NURTURING", "CLOSED_WON", "CLOSED_LOST"]),
   source: z.enum(["MANUAL", "MLS", "WEBSITE", "REFERRAL", "SOCIAL", "OTHER"]),
+  assignedTo: z.string().optional(),
   notes: z.string().max(2000).optional(),
 });
 
@@ -48,16 +49,16 @@ type NewLeadFormValues = z.infer<typeof newLeadFormSchema>;
 const STATUSES = ["NEW", "CONTACTED", "QUALIFIED", "NURTURING", "CLOSED_WON", "CLOSED_LOST"] as const;
 const SOURCES = ["MANUAL", "MLS", "WEBSITE", "REFERRAL", "SOCIAL", "OTHER"] as const;
 
-export function NewLeadSheet({ onCreated }: { onCreated?: () => void }) {
+export function NewLeadSheet() {
   const [open, setOpen] = useState(false);
   const utils = trpc.useUtils();
+  const { data: members } = trpc.leads.brokerageMembers.useQuery();
 
   const createLead = trpc.leads.create.useMutation({
     onSuccess: () => {
       utils.leads.list.invalidate();
       setOpen(false);
       form.reset();
-      onCreated?.();
     },
   });
 
@@ -69,6 +70,7 @@ export function NewLeadSheet({ onCreated }: { onCreated?: () => void }) {
       phone: "",
       status: "NEW",
       source: "MANUAL",
+      assignedTo: "__none__",
       notes: "",
     },
   });
@@ -80,6 +82,7 @@ export function NewLeadSheet({ onCreated }: { onCreated?: () => void }) {
       phone: data.phone || undefined,
       status: data.status,
       source: data.source,
+      assignedTo: data.assignedTo === "__none__" ? undefined : data.assignedTo || undefined,
       notes: data.notes || undefined,
     });
   }
@@ -198,6 +201,31 @@ export function NewLeadSheet({ onCreated }: { onCreated?: () => void }) {
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="assignedTo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Assign to</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Unassigned" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="__none__">Unassigned</SelectItem>
+                      {members?.map((m) => (
+                        <SelectItem key={m.id} value={m.id}>
+                          {m.name ?? m.email}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}

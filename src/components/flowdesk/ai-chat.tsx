@@ -1,33 +1,70 @@
 "use client";
 
 import { useChat } from "ai/react";
+import type { Message } from "ai/react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
-import { Send, Bot, User } from "lucide-react";
+import { Send, Bot, User, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
+
+const STORAGE_KEY = "flowdesk-chat-history";
+
+const WELCOME_MESSAGE: Message = {
+  id: "welcome",
+  role: "assistant",
+  content:
+    "Hi! I'm your BrokerOS AI assistant. I can help you draft emails, summarize deals, suggest tasks, and answer questions about your transactions. What do you need?",
+};
+
+function getStoredMessages(): Message[] {
+  if (typeof window === "undefined") return [WELCOME_MESSAGE];
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) {
+      const parsed = JSON.parse(raw) as Message[];
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    }
+  } catch {
+    // ignore parse errors
+  }
+  return [WELCOME_MESSAGE];
+}
 
 export function AiChat({ brokerageId }: { brokerageId?: string }) {
-  const { messages, input, handleInputChange, handleSubmit, isLoading } =
+  // Capture initial messages once — useState with initialiser runs only on mount
+  const [initialMessages] = useState<Message[]>(getStoredMessages);
+
+  const { messages, input, handleInputChange, handleSubmit, isLoading, setMessages } =
     useChat({
       api: "/api/ai/chat",
       body: { brokerageId },
-      initialMessages: [
-        {
-          id: "welcome",
-          role: "assistant",
-          content:
-            "Hi! I'm your BrokerOS AI assistant. I can help you draft emails, summarize deals, suggest tasks, and answer questions about your transactions. What do you need?",
-        },
-      ],
+      initialMessages,
     });
 
   const bottomRef = useRef<HTMLDivElement>(null);
 
+  // Persist every message update to localStorage
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(messages));
+    } catch {
+      // quota exceeded or private browsing — silently ignore
+    }
+  }, [messages]);
+
+  // Scroll to bottom on new messages
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  function clearChat() {
+    setMessages([WELCOME_MESSAGE]);
+    try {
+      localStorage.removeItem(STORAGE_KEY);
+    } catch {}
+  }
 
   return (
     <div className="flex flex-col h-full">
@@ -87,32 +124,44 @@ export function AiChat({ brokerageId }: { brokerageId?: string }) {
         </div>
       </ScrollArea>
 
-      <form
-        onSubmit={handleSubmit}
-        className="border-t border-slate-200 p-4 flex gap-2"
-      >
-        <Textarea
-          value={input}
-          onChange={handleInputChange}
-          placeholder="Ask about a deal, draft an email, suggest tasks..."
-          className="resize-none min-h-[44px] max-h-32"
-          rows={1}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSubmit(e as unknown as React.FormEvent);
-            }
-          }}
-        />
-        <Button
-          type="submit"
-          size="icon"
-          disabled={isLoading || !input.trim()}
-          className="shrink-0"
-        >
-          <Send className="h-4 w-4" />
-        </Button>
-      </form>
+      <div className="border-t border-slate-200 p-4 space-y-2">
+        <form onSubmit={handleSubmit} className="flex gap-2">
+          <Textarea
+            value={input}
+            onChange={handleInputChange}
+            placeholder="Ask about a deal, draft an email, suggest tasks..."
+            className="resize-none min-h-[44px] max-h-32"
+            rows={1}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSubmit(e as unknown as React.FormEvent);
+              }
+            }}
+          />
+          <Button
+            type="submit"
+            size="icon"
+            disabled={isLoading || !input.trim()}
+            className="shrink-0"
+          >
+            <Send className="h-4 w-4" />
+          </Button>
+        </form>
+        {messages.length > 1 && (
+          <div className="flex justify-end">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="text-xs text-slate-400 hover:text-slate-600 h-6 px-2"
+              onClick={clearChat}
+            >
+              <Trash2 className="h-3 w-3 mr-1" />
+              Clear chat
+            </Button>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

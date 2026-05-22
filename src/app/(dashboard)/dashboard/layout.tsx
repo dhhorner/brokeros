@@ -3,13 +3,6 @@ import { TopBar } from "@/components/layout/topbar";
 import { auth } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
-const pageTitles: Record<string, string> = {
-  "/dashboard/leads": "LeadOwn",
-  "/dashboard/deals": "DealPulse",
-  "/dashboard/flowdesk": "FlowDesk",
-  "/dashboard/settings/billing": "Settings — Billing",
-};
-
 export default async function DashboardLayout({
   children,
 }: {

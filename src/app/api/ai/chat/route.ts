@@ -32,16 +32,45 @@ export async function POST(req: NextRequest) {
         closeDate: true,
         property: { select: { address: true, price: true } },
         riskScore: true,
+        parties: { select: { name: true, role: true } },
+        deadlines: {
+          where: { completedAt: null },
+          select: { type: true, dueDate: true },
+          orderBy: { dueDate: "asc" },
+        },
+        tasks: {
+          where: { status: "OPEN" },
+          select: { title: true },
+          take: 10,
+        },
       },
       take: 10,
     });
 
     if (openDeals.length > 0) {
       contextBlock = `\n\nCurrent open deals for this brokerage:\n${openDeals
-        .map(
-          (d: { property: { address: string; price: unknown }; status: string; closeDate: Date | null; riskScore: string | null }) =>
-            `- ${d.property.address} | Status: ${d.status} | Close: ${d.closeDate?.toLocaleDateString() ?? "TBD"} | Risk: ${d.riskScore ?? "N/A"}`
-        )
+        .map((d) => {
+          const parties = d.parties.length
+            ? `  Parties: ${d.parties.map((p) => `${p.role} ${p.name}`).join(", ")}`
+            : "";
+          const deadlines = d.deadlines.length
+            ? `  Pending deadlines: ${d.deadlines
+                .map((dl) => `${dl.type} (${new Date(dl.dueDate).toLocaleDateString()})`)
+                .join(", ")}`
+            : "";
+          const tasks = d.tasks.length
+            ? `  Open tasks: ${d.tasks.map((t) => t.title).join(", ")}`
+            : "";
+          const lines = [
+            `- ${d.property.address} | Status: ${d.status} | Close: ${d.closeDate?.toLocaleDateString() ?? "TBD"} | Risk: ${d.riskScore ?? "N/A"}`,
+            parties,
+            deadlines,
+            tasks,
+          ]
+            .filter(Boolean)
+            .join("\n");
+          return lines;
+        })
         .join("\n")}`;
     }
   }
