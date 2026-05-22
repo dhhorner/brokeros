@@ -291,29 +291,35 @@ export const transactionsRouter = createTRPCRouter({
       });
     }),
 
-  // ─── Open tasks across all transactions ────────────────────────────────────
+  // ─── Tasks across all transactions ────────────────────────────────────────
 
-  listOpenTasks: brokerageProcedure.query(async ({ ctx }) => {
-    return ctx.db.task.findMany({
-      where: {
-        brokerageId: ctx.brokerageId,
-        status: "OPEN",
-      },
-      select: {
-        id: true,
-        title: true,
-        dueDate: true,
-        status: true,
-        assignedTo: true,
-        transaction: {
-          select: {
-            id: true,
-            property: { select: { address: true } },
+  listTasks: brokerageProcedure
+    .input(z.object({ status: z.enum(["OPEN", "COMPLETED"]).default("OPEN") }))
+    .query(async ({ ctx, input }) => {
+      return ctx.db.task.findMany({
+        where: {
+          brokerageId: ctx.brokerageId,
+          status: input.status,
+        },
+        select: {
+          id: true,
+          title: true,
+          dueDate: true,
+          completedAt: true,
+          status: true,
+          assignedTo: true,
+          transaction: {
+            select: {
+              id: true,
+              property: { select: { address: true } },
+            },
           },
         },
-      },
-      orderBy: [{ dueDate: "asc" }, { createdAt: "asc" }],
-      take: 100,
-    });
-  }),
+        orderBy:
+          input.status === "COMPLETED"
+            ? [{ completedAt: "desc" }]
+            : [{ dueDate: "asc" }, { createdAt: "asc" }],
+        take: 100,
+      });
+    }),
 });

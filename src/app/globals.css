@@ -36,3 +36,132 @@
     height: 100%;
   }
 }
+
+/* ─── Executive Dark ─────────────────────────────────────────────────────── */
+
+[data-theme="executive-dark"] {
+  --color-primary: hsl(43 96% 52%);
+  --color-primary-foreground: hsl(220 40% 10%);
+  --color-background: hsl(220 38% 10%);
+  --color-foreground: hsl(210 30% 90%);
+  --color-border: hsl(220 28% 22%);
+  --color-muted: hsl(220 30% 16%);
+  --color-muted-foreground: hsl(215 20% 55%);
+  --color-card: hsl(220 35% 15%);
+  --color-card-foreground: hsl(210 30% 90%);
+  --color-popover: hsl(220 35% 15%);
+  --color-popover-foreground: hsl(210 30% 90%);
+  --color-accent: hsl(220 30% 20%);
+  --color-accent-foreground: hsl(210 30% 90%);
+  --color-input: hsl(220 28% 22%);
+}
+
+/* Surfaces */
+[data-theme="executive-dark"] .bg-white        { background-color: hsl(220 35% 15%); }
+[data-theme="executive-dark"] .bg-slate-50      { background-color: hsl(220 35% 13%); }
+[data-theme="executive-dark"] .bg-slate-100     { background-color: hsl(220 32% 20%); }
+[data-theme="executive-dark"] .bg-slate-200     { background-color: hsl(220 28% 25%); }
+
+/* Hover surfaces */
+[data-theme="executive-dark"] .hover\:bg-slate-50:hover  { background-color: hsl(220 32% 19%); }
+[data-theme="executive-dark"] .hover\:bg-slate-100:hover { background-color: hsl(220 32% 22%); }
+[data-theme="executive-dark"] .hover\:bg-red-50:hover    { background-color: hsl(0 30% 18%); }
+
+/* Text */
+[data-theme="executive-dark"] .text-slate-900  { color: hsl(210 30% 92%); }
+[data-theme="executive-dark"] .text-slate-800  { color: hsl(210 25% 85%); }
+[data-theme="executive-dark"] .text-slate-700  { color: hsl(215 22% 78%); }
+[data-theme="executive-dark"] .text-slate-600  { color: hsl(215 20% 62%); }
+[data-theme="executive-dark"] .text-slate-500  { color: hsl(215 18% 52%); }
+[data-theme="executive-dark"] .text-slate-400  { color: hsl(215 16% 42%); }
+
+/* Borders */
+[data-theme="executive-dark"] .border-slate-200 { border-color: hsl(220 28% 22%); }
+[data-theme="executive-dark"] .border-slate-100 { border-color: hsl(220 28% 18%); }
+
+/* Sidebar overrides (on top of above) */
+[data-theme="executive-dark"] aside                    { background-color: hsl(220 38% 12%); border-color: hsl(220 28% 20%); }
+[data-theme="executive-dark"] aside .border-b          { border-color: hsl(220 28% 20%); }
+[data-theme="executive-dark"] aside .border-t          { border-color: hsl(220 28% 18%); }
+[data-theme="executive-dark"] aside .bg-slate-900      { background-color: hsl(43 96% 52%); }
+[data-theme="executive-dark"] aside .text-slate-900    { color: hsl(43 96% 62%); }
+[data-theme="executive-dark"] aside .bg-slate-100      { background-color: hsl(43 96% 52% / 0.15); }
+[data-theme="executive-dark"] aside .bg-slate-50       { background-color: transparent; }
+[data-theme="executive-dark"] aside .text-slate-600    { color: hsl(215 20% 55%); }
+[data-theme="executive-dark"] aside .text-slate-400    { color: hsl(215 18% 40%); }
+[data-theme="executive-dark"] aside a:hover            { background-color: hsl(220 30% 18%); color: hsl(0 0% 95%); }
+
+/* Topbar */
+[data-theme="executive-dark"] header                   { background-color: hsl(220 35% 15%); border-color: hsl(220 28% 22%); }
+[data-theme="executive-dark"] header .text-slate-900   { color: hsl(210 30% 92%); }
+[data-theme="executive-dark"] header .text-slate-500   { color: hsl(215 18% 52%); }
+[data-theme="executive-dark"] header .text-slate-700   { color: hsl(215 22% 75%); }
+
+/* Theme picker chrome */
+[data-theme="executive-dark"] .theme-icon,
+[data-theme="executive-dark"] .theme-label { color: hsl(215 20% 48%); }
+
+/* ─── Modern Warm ────────────────────────────────────────────────────────── */
+
+[data-theme="modern-warm"] {
+  --color-primary: hsl(16 58% 44%);
+  --color-primary-foreground: hsl(30 20% 97%);
+  --color-background: hsl(30 25% 95%);
+  --color-foreground: hsl(25 25% 15%);
+  --color-border: hsl(30 16% 82%);
+  --color-muted: hsl(30 18% 91%);
+  --color-muted-foreground: hsl(25 15% 45%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(25 25% 15%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(25 25% 15%);
+  --color-accent: hsl(30 20% 90%);
+  --color-accent-foreground: hsl(25 25% 15%);
+  --color-input: hsl(30 16% 82%);
+}
+
+/* Surfaces */
+[data-theme="modern-warm"] .bg-white        { background-color: hsl(0 0% 100%); }
+[data-theme="modern-warm"] .bg-slate-50     { background-color: hsl(30 18% 94%); }
+[data-theme="modern-warm"] .bg-slate-100    { background-color: hsl(30 18% 89%); }
+[data-theme="modern-warm"] .bg-slate-200    { background-color: hsl(30 14% 82%); }
+
+/* Hover surfaces */
+[data-theme="modern-warm"] .hover\:bg-slate-50:hover  { background-color: hsl(30 16% 96%); }
+[data-theme="modern-warm"] .hover\:bg-slate-100:hover { background-color: hsl(30 18% 91%); }
+[data-theme="modern-warm"] .hover\:bg-red-50:hover    { background-color: hsl(0 60% 96%); }
+
+/* Text */
+[data-theme="modern-warm"] .text-slate-900  { color: hsl(25 25% 12%); }
+[data-theme="modern-warm"] .text-slate-800  { color: hsl(25 22% 18%); }
+[data-theme="modern-warm"] .text-slate-700  { color: hsl(25 18% 28%); }
+[data-theme="modern-warm"] .text-slate-600  { color: hsl(25 16% 38%); }
+[data-theme="modern-warm"] .text-slate-500  { color: hsl(25 14% 48%); }
+[data-theme="modern-warm"] .text-slate-400  { color: hsl(25 12% 58%); }
+
+/* Borders */
+[data-theme="modern-warm"] .border-slate-200 { border-color: hsl(30 16% 82%); }
+[data-theme="modern-warm"] .border-slate-100 { border-color: hsl(30 14% 88%); }
+
+/* Sidebar overrides */
+[data-theme="modern-warm"] aside                 { background-color: hsl(30 22% 92%); border-color: hsl(30 14% 82%); }
+[data-theme="modern-warm"] aside .border-b       { border-color: hsl(30 14% 82%); }
+[data-theme="modern-warm"] aside .border-t       { border-color: hsl(30 14% 85%); }
+[data-theme="modern-warm"] aside .bg-slate-900   { background-color: hsl(16 58% 44%); }
+[data-theme="modern-warm"] aside .text-slate-900 { color: hsl(25 25% 15%); }
+[data-theme="modern-warm"] aside .bg-slate-100   { background-color: hsl(16 38% 86%); }
+[data-theme="modern-warm"] aside .bg-slate-50    { background-color: transparent; }
+[data-theme="modern-warm"] aside .text-slate-600 { color: hsl(25 18% 38%); }
+[data-theme="modern-warm"] aside .text-slate-400 { color: hsl(25 14% 52%); }
+[data-theme="modern-warm"] aside a:hover         { background-color: hsl(30 18% 86%); color: hsl(25 25% 15%); }
+
+/* Topbar */
+[data-theme="modern-warm"] header                  { background-color: hsl(0 0% 100%); border-color: hsl(30 16% 82%); }
+[data-theme="modern-warm"] header .text-slate-900  { color: hsl(25 25% 12%); }
+[data-theme="modern-warm"] header .text-slate-500  { color: hsl(25 14% 48%); }
+[data-theme="modern-warm"] header .text-slate-700  { color: hsl(25 18% 28%); }
+
+/* Theme picker chrome */
+[data-theme="modern-warm"] .theme-icon,
+[data-theme="modern-warm"] .theme-label { color: hsl(25 16% 48%); }
+

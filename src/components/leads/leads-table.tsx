@@ -21,7 +21,17 @@ import { Button } from "@/components/ui/button";
 import { LeadStatus, LeadSource } from "@prisma/client";
 import { useState } from "react";
 import { NewLeadSheet } from "./new-lead-sheet";
+import { EditLeadSheet } from "./edit-lead-sheet";
 import { format } from "date-fns";
+import { Pencil, Trash2 } from "lucide-react";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const statusColors: Record<LeadStatus, string> = {
   NEW: "bg-blue-100 text-blue-700",
@@ -35,6 +45,16 @@ const statusColors: Record<LeadStatus, string> = {
 export function LeadsTable() {
   const [statusFilter, setStatusFilter] = useState<LeadStatus | "ALL">("ALL");
   const [sourceFilter, setSourceFilter] = useState<LeadSource | "ALL">("ALL");
+  const [editingLeadId, setEditingLeadId] = useState<string | null>(null);
+  const [deletingLead, setDeletingLead] = useState<{ id: string; name: string } | null>(null);
+
+  const utils = trpc.useUtils();
+  const deleteLead = trpc.leads.delete.useMutation({
+    onSuccess: () => {
+      utils.leads.list.invalidate();
+      setDeletingLead(null);
+    },
+  });
 
   const { data, isLoading, isError } = trpc.leads.list.useQuery({
     status: statusFilter !== "ALL" ? statusFilter : undefined,
@@ -108,32 +128,33 @@ export function LeadsTable() {
               <TableHead>Source</TableHead>
               <TableHead>Assigned agent</TableHead>
               <TableHead>Created</TableHead>
+              <TableHead className="w-10" />
             </TableRow>
           </TableHeader>
           <TableBody>
             {isLoading && (
               <TableRow>
-                <TableCell colSpan={5} className="py-12 text-center text-slate-400">
+                <TableCell colSpan={6} className="py-12 text-center text-slate-400">
                   Loading leads...
                 </TableCell>
               </TableRow>
             )}
             {isError && (
               <TableRow>
-                <TableCell colSpan={5} className="py-12 text-center text-red-500">
+                <TableCell colSpan={6} className="py-12 text-center text-red-500">
                   Failed to load leads.
                 </TableCell>
               </TableRow>
             )}
             {data?.leads.length === 0 && !isLoading && (
               <TableRow>
-                <TableCell colSpan={5} className="py-12 text-center text-slate-400">
+                <TableCell colSpan={6} className="py-12 text-center text-slate-400">
                   No leads found. Add your first lead to get started.
                 </TableCell>
               </TableRow>
             )}
             {data?.leads.map((lead) => (
-              <TableRow key={lead.id} className="hover:bg-slate-50">
+              <TableRow key={lead.id} className="hover:bg-slate-50 group">
                 <TableCell>
                   <div className="font-medium text-slate-900">{lead.name}</div>
                   {lead.email && (
@@ -162,11 +183,60 @@ export function LeadsTable() {
                 <TableCell className="text-sm text-slate-500">
                   {format(new Date(lead.createdAt), "MMM d, yyyy")}
                 </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7"
+                      onClick={() => setEditingLeadId(lead.id)}
+                    >
+                      <Pencil className="h-3.5 w-3.5" />
+                    </Button>
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className="h-7 w-7 text-red-500 hover:text-red-600 hover:bg-red-50"
+                      onClick={() => setDeletingLead({ id: lead.id, name: lead.name })}
+                    >
+                      <Trash2 className="h-3.5 w-3.5" />
+                    </Button>
+                  </div>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </div>
+
+      <EditLeadSheet
+        leadId={editingLeadId}
+        open={editingLeadId !== null}
+        onOpenChange={(open) => { if (!open) setEditingLeadId(null); }}
+      />
+
+      <Dialog open={deletingLead !== null} onOpenChange={(open) => { if (!open) setDeletingLead(null); }}>
+        <DialogContent className="sm:max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Delete lead</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete <span className="font-medium text-slate-900">{deletingLead?.name}</span>? This cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="gap-2">
+            <Button variant="outline" onClick={() => setDeletingLead(null)}>
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              disabled={deleteLead.isPending}
+              onClick={() => deletingLead && deleteLead.mutate({ id: deletingLead.id })}
+            >
+              {deleteLead.isPending ? "Deleting..." : "Delete"}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
 
       {data?.nextCursor && (
         <div className="text-center">

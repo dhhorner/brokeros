@@ -106,6 +106,19 @@ export const leadsRouter = createTRPCRouter({
       return lead;
     }),
 
+  delete: brokerageProcedure
+    .input(z.object({ id: z.string().cuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const existing = await ctx.db.lead.findFirst({
+        where: { id: input.id, brokerageId: ctx.brokerageId },
+        select: { id: true },
+      });
+      if (!existing) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+      await ctx.db.lead.delete({ where: { id: input.id } });
+    }),
+
   update: brokerageProcedure
     .input(updateLeadSchema)
     .mutation(async ({ ctx, input }) => {

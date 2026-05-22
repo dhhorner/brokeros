@@ -10,6 +10,7 @@ import {
   Settings,
   Building2,
 } from "lucide-react";
+import { ThemePicker } from "@/components/layout/theme-picker";
 
 const navItems = [
   {
@@ -81,25 +82,30 @@ export function Sidebar() {
           );
         })}
 
-        <div className="mt-auto pt-3 pb-1 border-t border-slate-100">
-          {settingsItems.map((item) => {
-            const active = pathname.startsWith(item.href);
-            return (
-              <Link
-                key={item.href}
-                href={item.href}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg pl-[50px] pr-3 py-2 text-sm font-medium transition-colors",
-                  active
-                    ? "bg-slate-100 text-slate-900"
-                    : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-                )}
-              >
-                <item.icon className="h-4 w-4 shrink-0" />
-                {item.label}
-              </Link>
-            );
-          })}
+        <div className="mt-auto border-t border-slate-100">
+          <div className="pt-3">
+            <ThemePicker />
+          </div>
+          <div className="border-t border-slate-100 pt-1 pb-1">
+            {settingsItems.map((item) => {
+              const active = pathname.startsWith(item.href);
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  className={cn(
+                    "flex items-center gap-3 rounded-lg pl-[50px] pr-3 py-2 text-sm font-medium transition-colors",
+                    active
+                      ? "bg-slate-100 text-slate-900"
+                      : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
+                  )}
+                >
+                  <item.icon className="h-4 w-4 shrink-0" />
+                  {item.label}
+                </Link>
+              );
+            })}
+          </div>
         </div>
       </nav>
     </aside>

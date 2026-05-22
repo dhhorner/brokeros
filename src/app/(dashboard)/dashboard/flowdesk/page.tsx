@@ -30,14 +30,6 @@ export default async function FlowDeskPage() {
       <div className="flex flex-1 gap-4 overflow-hidden rounded-lg border border-slate-200 bg-white min-h-[600px]">
         {/* Left: task queue */}
         <div className="w-[520px] shrink-0 border-r border-slate-200 flex flex-col">
-          <div className="px-4 py-3 border-b border-slate-200">
-            <h3 className="text-sm font-semibold text-slate-700">
-              Open Tasks
-            </h3>
-            <p className="text-xs text-slate-400 mt-0.5">
-              All transactions, sorted by due date
-            </p>
-          </div>
           <div className="flex-1 overflow-hidden">
             <TaskQueue />
           </div>
