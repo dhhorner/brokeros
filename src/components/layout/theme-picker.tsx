@@ -16,8 +16,8 @@ export function ThemePicker() {
   return (
     <div className="px-3 pb-4">
       <div className="flex items-center gap-2 px-1 mb-1.5">
-        <Palette className="h-3 w-3 shrink-0 theme-icon" />
-        <span className="text-xs font-medium theme-label">Theme</span>
+        <Palette className="h-4 w-4 shrink-0 theme-icon" />
+        <span className="text-sm font-medium theme-label">Theme</span>
       </div>
       <Select value={theme} onValueChange={(v) => setTheme(v as typeof theme)}>
         <SelectTrigger className="h-8 text-xs theme-select-trigger">
