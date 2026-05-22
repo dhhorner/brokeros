@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LeadOwn — User Guide</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --slate-50:  #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --violet-50:  #f5f3ff;
+      --violet-100: #ede9fe;
+      --violet-500: #8b5cf6;
+      --violet-600: #7c3aed;
+      --violet-700: #6d28d9;
+      --blue-50:   #eff6ff;
+      --blue-100:  #dbeafe;
+      --blue-600:  #2563eb;
+      --blue-700:  #1d4ed8;
+      --green-50:  #f0fdf4;
+      --green-100: #dcfce7;
+      --green-600: #16a34a;
+      --green-700: #15803d;
+      --yellow-50: #fefce8;
+      --yellow-100:#fef9c3;
+      --yellow-600:#ca8a04;
+      --yellow-700:#a16207;
+      --purple-50: #faf5ff;
+      --purple-100:#f3e8ff;
+      --purple-600:#9333ea;
+      --purple-700:#7e22ce;
+      --orange-50: #fff7ed;
+      --orange-100:#ffedd5;
+      --orange-600:#ea580c;
+      --orange-700:#c2410c;
+      --red-50:    #fef2f2;
+      --red-100:   #fee2e2;
+      --red-600:   #dc2626;
+      --red-700:   #b91c1c;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--slate-800);
+      background: var(--slate-50);
+    }
+
+    .page-wrap {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    aside {
+      background: white;
+      border-right: 1px solid var(--slate-200);
+      padding: 32px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 0 24px 24px;
+      border-bottom: 1px solid var(--slate-100);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-logo .product {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--violet-600);
+      letter-spacing: -0.3px;
+    }
+
+    .sidebar-logo .sub {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--slate-400);
+      margin-top: 2px;
+    }
+
+    .sidebar-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 24px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--slate-400);
+      text-decoration: none;
+      transition: color 0.1s;
+    }
+    .sidebar-back:hover { color: var(--slate-600); }
+    .sidebar-back svg { width: 12px; height: 12px; }
+
+    .nav-section { padding: 0 16px; margin-bottom: 8px; }
+
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--slate-400);
+      padding: 0 8px;
+      margin-bottom: 4px;
+    }
+
+    .nav-section a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 13.5px;
+      color: var(--slate-600);
+      text-decoration: none;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .nav-section a:hover { background: var(--slate-100); color: var(--slate-900); }
+    .nav-section a.active { background: var(--violet-50); color: var(--violet-700); font-weight: 500; }
+
+    .nav-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.4;
+      flex-shrink: 0;
+    }
+
+    /* ── Main ── */
+    main { padding: 56px 64px; max-width: 860px; }
+
+    /* ── Hero ── */
+    .hero {
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--violet-600);
+      background: var(--violet-50);
+      border: 1px solid var(--violet-100);
+      border-radius: 999px;
+      padding: 3px 12px;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--slate-900);
+      letter-spacing: -0.8px;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: var(--slate-500);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    /* ── Sections ── */
+    section { margin-bottom: 52px; scroll-margin-top: 32px; }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--slate-900);
+      letter-spacing: -0.4px;
+      margin-bottom: 6px;
+    }
+
+    .section-intro {
+      color: var(--slate-500);
+      font-size: 14.5px;
+      margin-bottom: 24px;
+    }
+
+    h3 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--slate-500);
+      margin: 28px 0 12px;
+    }
+
+    p { margin-bottom: 12px; color: var(--slate-600); }
+
+    /* ── Table mockup ── */
+    .table-mock {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 20px 0;
+      font-size: 13px;
+    }
+
+    .table-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid var(--slate-100);
+      gap: 8px;
+    }
+
+    .filter-group { display: flex; align-items: center; gap: 8px; }
+
+    .mock-select {
+      height: 32px;
+      padding: 0 10px;
+      border: 1px solid var(--slate-200);
+      border-radius: 6px;
+      font-size: 12px;
+      color: var(--slate-600);
+      background: white;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 110px;
+    }
+
+    .mock-btn {
+      height: 32px;
+      padding: 0 14px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .mock-btn-primary {
+      background: var(--slate-900);
+      color: white;
+      border: none;
+    }
+
+    .mock-th {
+      background: var(--slate-50);
+      padding: 8px 16px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--slate-500);
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 40px;
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .mock-row {
+      padding: 10px 16px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr 1.5fr 1fr 40px;
+      align-items: center;
+      border-bottom: 1px solid var(--slate-100);
+      color: var(--slate-700);
+    }
+
+    .mock-row:last-child { border-bottom: none; }
+
+    .mock-name { font-weight: 500; color: var(--slate-900); }
+    .mock-email { font-size: 11px; color: var(--slate-400); margin-top: 1px; }
+
+    .mock-source-badge {
+      display: inline-block;
+      font-size: 11px;
+      padding: 2px 8px;
+      border: 1px solid var(--slate-200);
+      border-radius: 5px;
+      color: var(--slate-600);
+    }
+
+    /* ── Status badges ── */
+    .status-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .status-card {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .status-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 999px;
+      font-size: 11.5px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    .s-new       { background: var(--blue-50);   color: var(--blue-700); }
+    .s-contacted { background: var(--yellow-50);  color: var(--yellow-700); }
+    .s-qualified { background: var(--purple-50);  color: var(--purple-700); }
+    .s-nurturing { background: var(--orange-50);  color: var(--orange-700); }
+    .s-won       { background: var(--green-50);   color: var(--green-700); }
+    .s-lost      { background: var(--slate-100);  color: var(--slate-600); }
+
+    .status-desc { font-size: 12px; color: var(--slate-500); line-height: 1.4; }
+
+    /* ── Source grid ── */
+    .source-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .source-chip {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      padding: 12px 14px;
+      font-size: 13px;
+    }
+
+    .source-name { font-weight: 600; color: var(--slate-800); margin-bottom: 3px; }
+    .source-desc { font-size: 12px; color: var(--slate-500); }
+
+    /* ── Field list ── */
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .field-item {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .field-name { font-size: 13px; font-weight: 600; color: var(--slate-800); margin-bottom: 3px; }
+
+    .field-req {
+      display: inline-block;
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 1px 6px; border-radius: 4px; margin-left: 6px;
+      background: var(--red-50); color: var(--red-600); border: 1px solid var(--red-100);
+    }
+
+    .field-opt {
+      display: inline-block;
+      font-size: 10px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.5px;
+      padding: 1px 6px; border-radius: 4px; margin-left: 6px;
+      background: var(--slate-100); color: var(--slate-500);
+    }
+
+    .field-desc { font-size: 13px; color: var(--slate-500); }
+
+    /* ── Steps ── */
+    .steps { display: flex; flex-direction: column; gap: 16px; }
+
+    .step {
+      display: flex;
+      gap: 16px;
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--violet-600);
+      color: white;
+      font-size: 13px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
+
+    .step-body strong { display: block; font-size: 15px; font-weight: 600; color: var(--slate-800); margin-bottom: 4px; }
+    .step-body p { margin: 0; font-size: 14px; color: var(--slate-500); line-height: 1.55; }
+
+    /* ── Callouts ── */
+    .callout {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 10px;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    .callout-icon { font-size: 18px; flex-shrink: 0; line-height: 1.4; }
+    .callout-tip  { background: var(--violet-50); border: 1px solid var(--violet-100); color: var(--violet-700); }
+    .callout-warn { background: var(--yellow-50); border: 1px solid var(--yellow-100); color: var(--yellow-700); }
+    .callout-note { background: var(--slate-100); border: 1px solid var(--slate-200);  color: var(--slate-700); }
+    .callout strong { display: block; margin-bottom: 3px; }
+
+    /* ── Lifecycle flow ── */
+    .lifecycle {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0;
+      margin: 24px 0;
+    }
+
+    .lc-node {
+      background: white;
+      border: 2px solid var(--slate-200);
+      border-radius: 10px;
+      padding: 10px 14px;
+      text-align: center;
+      min-width: 100px;
+    }
+
+    .lc-node .label { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+    .lc-arrow { color: var(--slate-300); font-size: 18px; padding: 0 4px; }
+
+    .lc-new       { border-color: var(--blue-600); }
+    .lc-new       .label { color: var(--blue-700); }
+    .lc-contacted { border-color: var(--yellow-600); }
+    .lc-contacted .label { color: var(--yellow-700); }
+    .lc-qualified { border-color: var(--purple-600); }
+    .lc-qualified .label { color: var(--purple-700); }
+    .lc-nurturing { border-color: var(--orange-600); }
+    .lc-nurturing .label { color: var(--orange-700); }
+    .lc-won       { border-color: var(--green-600); }
+    .lc-won       .label { color: var(--green-700); }
+    .lc-lost      { border-color: var(--slate-400); }
+    .lc-lost      .label { color: var(--slate-500); }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--slate-200);
+      font-size: 13px;
+      color: var(--slate-400);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @media print {
+      aside { display: none; }
+      .page-wrap { grid-template-columns: 1fr; }
+      main { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <aside>
+    <div class="sidebar-logo">
+      <div class="product">LeadOwn</div>
+      <div class="sub">User Guide</div>
+    </div>
+
+    <a href="guide.html" class="sidebar-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      All guides
+    </a>
+
+    <div class="nav-section">
+      <div class="nav-section-label">LeadOwn</div>
+      <a href="#overview"><span class="nav-dot"></span> Overview</a>
+      <a href="#table"><span class="nav-dot"></span> Leads Table</a>
+      <a href="#add-lead"><span class="nav-dot"></span> Adding a Lead</a>
+      <a href="#statuses"><span class="nav-dot"></span> Lead Statuses</a>
+      <a href="#sources"><span class="nav-dot"></span> Lead Sources</a>
+      <a href="#edit-delete"><span class="nav-dot"></span> Editing &amp; Deleting</a>
+      <a href="#filtering"><span class="nav-dot"></span> Filtering</a>
+      <a href="#nurture"><span class="nav-dot"></span> Nurture Sequences</a>
+    </div>
+  </aside>
+
+  <main>
+
+    <div class="hero" id="overview">
+      <div class="hero-eyebrow">BrokerOS Module</div>
+      <h1>LeadOwn</h1>
+      <p>Capture and manage every prospect from first contact through to closed deal. LeadOwn gives you a filterable table of all your leads, structured status tracking, source attribution, and a nurture sequence engine to automate follow-up.</p>
+    </div>
+
+    <!-- Table -->
+    <section id="table">
+      <h2>Leads Table</h2>
+      <p class="section-intro">Navigate to <strong>Dashboard → LeadOwn</strong> to see all your leads in a sortable, filterable table.</p>
+
+      <div class="table-mock">
+        <div class="table-toolbar">
+          <div class="filter-group">
+            <div class="mock-select">All statuses <span style="margin-left:auto;color:var(--slate-400)">▾</span></div>
+            <div class="mock-select">All sources <span style="margin-left:auto;color:var(--slate-400)">▾</span></div>
+          </div>
+          <div class="mock-btn mock-btn-primary">+ New lead</div>
+        </div>
+        <div class="mock-th">
+          <span>Name</span><span>Status</span><span>Source</span><span>Assigned agent</span><span>Created</span><span></span>
+        </div>
+        <div class="mock-row">
+          <div><div class="mock-name">Jane Smith</div><div class="mock-email">jane@example.com</div></div>
+          <span><span class="status-pill s-qualified" style="font-size:11px;padding:2px 8px;">QUALIFIED</span></span>
+          <span><span class="mock-source-badge">REFERRAL</span></span>
+          <span style="font-size:13px;color:var(--slate-600)">Sarah Lee</span>
+          <span style="font-size:13px;color:var(--slate-500)">May 10, 2026</span>
+          <span></span>
+        </div>
+        <div class="mock-row">
+          <div><div class="mock-name">Marcus Webb</div><div class="mock-email">mwebb@gmail.com</div></div>
+          <span><span class="status-pill s-new" style="font-size:11px;padding:2px 8px;">NEW</span></span>
+          <span><span class="mock-source-badge">WEBSITE</span></span>
+          <span style="font-size:13px;color:var(--slate-400)">Unassigned</span>
+          <span style="font-size:13px;color:var(--slate-500)">May 18, 2026</span>
+          <span></span>
+        </div>
+        <div class="mock-row">
+          <div><div class="mock-name">Rita Okonkwo</div></div>
+          <span><span class="status-pill s-nurturing" style="font-size:11px;padding:2px 8px;">NURTURING</span></span>
+          <span><span class="mock-source-badge">MLS</span></span>
+          <span style="font-size:13px;color:var(--slate-600)">Tom Park</span>
+          <span style="font-size:13px;color:var(--slate-500)">Apr 29, 2026</span>
+          <span></span>
+        </div>
+      </div>
+
+      <p>Each row shows the lead's name and email, their current status (color-coded badge), how they came in (source), which agent they're assigned to, and when the record was created. Hover a row to reveal edit and delete action buttons on the right.</p>
+
+      <p>The table loads 50 leads at a time. If there are more, a <strong>Load more</strong> button appears at the bottom.</p>
+    </section>
+
+    <!-- Add lead -->
+    <section id="add-lead">
+      <h2>Adding a Lead</h2>
+      <p class="section-intro">Click <strong>New lead</strong> in the top-right of the toolbar. A slide-out panel opens with a contact form.</p>
+
+      <h3>Form fields</h3>
+      <div class="field-grid">
+        <div class="field-item">
+          <div class="field-name">Full name <span class="field-req">required</span></div>
+          <div class="field-desc">The lead's full name. Used everywhere in the UI.</div>
+        </div>
+        <div class="field-item">
+          <div class="field-name">Email <span class="field-opt">optional</span></div>
+          <div class="field-desc">Must be a valid email address if provided. Used for nurture sequences.</div>
+        </div>
+        <div class="field-item">
+          <div class="field-name">Phone <span class="field-opt">optional</span></div>
+          <div class="field-desc">Contact phone number. Free-text, up to 20 characters.</div>
+        </div>
+        <div class="field-item">
+          <div class="field-name">Status <span class="field-opt">optional</span></div>
+          <div class="field-desc">Defaults to <strong>New</strong>. Set to a different stage if the lead already has history.</div>
+        </div>
+        <div class="field-item">
+          <div class="field-name">Source <span class="field-opt">optional</span></div>
+          <div class="field-desc">Where this lead came from. Defaults to <strong>Manual</strong>. See <a href="#sources">Lead Sources</a>.</div>
+        </div>
+        <div class="field-item">
+          <div class="field-name">Notes <span class="field-opt">optional</span></div>
+          <div class="field-desc">Free-text notes from the initial conversation. Up to 2,000 characters.</div>
+        </div>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Only the name is required.</strong> You can create a lead with just a name and fill in contact details later via edit.</div>
+      </div>
+    </section>
+
+    <!-- Statuses -->
+    <section id="statuses">
+      <h2>Lead Statuses</h2>
+      <p class="section-intro">Every lead has a status that reflects where they are in your pipeline. Status can be set when creating a lead and updated at any time via edit.</p>
+
+      <div class="lifecycle">
+        <div class="lc-node lc-new"><div class="label">New</div></div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-node lc-contacted"><div class="label">Contacted</div></div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-node lc-qualified"><div class="label">Qualified</div></div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-node lc-nurturing"><div class="label">Nurturing</div></div>
+        <div class="lc-arrow">→</div>
+        <div class="lc-node lc-won"><div class="label">Closed Won</div></div>
+        <br style="flex-basis:100%;height:0;" />
+        <div style="padding-left:120px;padding-top:8px;display:flex;align-items:center;gap:0;">
+          <div class="lc-arrow" style="transform:rotate(90deg)">→</div>
+          <div class="lc-node lc-lost" style="margin-top:0"><div class="label">Closed Lost</div></div>
+        </div>
+      </div>
+
+      <div class="status-grid">
+        <div class="status-card">
+          <div class="status-pill s-new">NEW</div>
+          <div class="status-desc">Lead has just been added. No outreach has happened yet.</div>
+        </div>
+        <div class="status-card">
+          <div class="status-pill s-contacted">CONTACTED</div>
+          <div class="status-desc">Initial contact made — email sent, call placed, or message sent.</div>
+        </div>
+        <div class="status-card">
+          <div class="status-pill s-qualified">QUALIFIED</div>
+          <div class="status-desc">Lead has been screened and confirmed as a genuine prospect.</div>
+        </div>
+        <div class="status-card">
+          <div class="status-pill s-nurturing">NURTURING</div>
+          <div class="status-desc">Lead is in a long-term follow-up sequence, not yet ready to transact.</div>
+        </div>
+        <div class="status-card">
+          <div class="status-pill s-won">CLOSED WON</div>
+          <div class="status-desc">Lead converted — transaction opened or referral completed.</div>
+        </div>
+        <div class="status-card">
+          <div class="status-pill s-lost">CLOSED LOST</div>
+          <div class="status-desc">Lead did not convert. Kept for reporting purposes.</div>
+        </div>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-icon">ℹ️</div>
+        <div>There is no enforced one-way flow. You can move a lead to any status at any time. Closed leads remain in the table and can be filtered in or out.</div>
+      </div>
+    </section>
+
+    <!-- Sources -->
+    <section id="sources">
+      <h2>Lead Sources</h2>
+      <p class="section-intro">Source tracks where a lead originated. It defaults to <strong>Manual</strong> and can be filtered in the leads table to see which channels are generating the most prospects.</p>
+
+      <div class="source-grid">
+        <div class="source-chip">
+          <div class="source-name">Manual</div>
+          <div class="source-desc">Added directly by a team member with no specific origin.</div>
+        </div>
+        <div class="source-chip">
+          <div class="source-name">MLS</div>
+          <div class="source-desc">Came through the Multiple Listing Service or a property portal.</div>
+        </div>
+        <div class="source-chip">
+          <div class="source-name">Website</div>
+          <div class="source-desc">Submitted a form or enquired via your brokerage website.</div>
+        </div>
+        <div class="source-chip">
+          <div class="source-name">Referral</div>
+          <div class="source-desc">Referred by an existing client, colleague, or partner.</div>
+        </div>
+        <div class="source-chip">
+          <div class="source-name">Social</div>
+          <div class="source-desc">Reached out or responded via social media.</div>
+        </div>
+        <div class="source-chip">
+          <div class="source-name">Other</div>
+          <div class="source-desc">Any source that doesn't fit the above categories.</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Edit & delete -->
+    <section id="edit-delete">
+      <h2>Editing &amp; Deleting</h2>
+      <p class="section-intro">All lead fields can be updated after creation. Deleting a lead is permanent and requires confirmation.</p>
+
+      <h3>Editing a lead</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Hover over the lead row.</strong>
+            <p>A pencil icon and a red trash icon appear in the rightmost column.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Click the pencil icon.</strong>
+            <p>A slide-out panel opens pre-filled with the lead's current values. Edit any field and click <strong>Save changes</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Deleting a lead</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Hover the row and click the red trash icon.</strong>
+            <p>A confirmation dialog appears showing the lead's name.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Click "Delete" to confirm.</strong>
+            <p>The lead is permanently removed from the database. This cannot be undone.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-warn">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Deletion is permanent.</strong> Consider moving the lead to <strong>Closed Lost</strong> instead if you want to keep the record for reporting.</div>
+      </div>
+    </section>
+
+    <!-- Filtering -->
+    <section id="filtering">
+      <h2>Filtering</h2>
+      <p class="section-intro">Two dropdowns in the toolbar let you narrow the leads table without leaving the page.</p>
+
+      <div class="field-grid">
+        <div class="field-item">
+          <div class="field-name">Status filter</div>
+          <div class="field-desc">Show only leads in a specific pipeline stage. Select "All statuses" to remove the filter.</div>
+        </div>
+        <div class="field-item">
+          <div class="field-name">Source filter</div>
+          <div class="field-desc">Show only leads from a specific origin channel. Useful for measuring which sources convert best.</div>
+        </div>
+      </div>
+
+      <p>When either filter is active a <strong>Clear filters</strong> button appears next to the dropdowns. Click it to reset both filters at once.</p>
+
+      <div class="callout callout-note">
+        <div class="callout-icon">ℹ️</div>
+        <div>Filters apply immediately — no need to press a search button. The table updates as soon as you make a selection.</div>
+      </div>
+    </section>
+
+    <!-- Nurture sequences -->
+    <section id="nurture">
+      <h2>Nurture Sequences</h2>
+      <p class="section-intro">Nurture sequences let you automatically send a series of follow-up emails to a lead over time.</p>
+
+      <p>Each sequence tracks a <strong>current step</strong>, a <strong>status</strong>, and a <strong>next send date</strong>. When a lead is placed in a sequence, the background worker picks it up and sends the appropriate email at the scheduled time.</p>
+
+      <div class="callout callout-warn">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Nurture sequences are not yet available in the UI.</strong> The data model and background worker are in place, but the interface for creating and managing sequences is coming in a future release. In the meantime, use the Notes field and manual status updates to track your follow-up cadence.</div>
+      </div>
+    </section>
+
+    <footer>
+      <span>BrokerOS — LeadOwn User Guide</span>
+      <span>Last updated May 2026</span>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  const navLinks = document.querySelectorAll(".nav-section a");
+  const sectionIds = ["overview","table","add-lead","statuses","sources","edit-delete","filtering","nurture"];
+
+  function setActive(id) {
+    navLinks.forEach((a) => {
+      a.classList.toggle("active", a.getAttribute("href") === "#" + id);
+    });
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible.length) setActive(visible[0].target.id);
+    },
+    { rootMargin: "0px 0px -60% 0px", threshold: 0 }
+  );
+
+  sectionIds.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  const initial = location.hash ? location.hash.slice(1) : "overview";
+  setActive(initial);
+</script>
+
+</body>
+</html>

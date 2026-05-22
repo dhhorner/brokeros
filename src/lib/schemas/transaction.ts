@@ -49,3 +49,14 @@ export const completeTaskSchema = z.object({
   id: z.string().cuid(),
 });
 
+export const createWithPropertySchema = z.object({
+  address: z.string().min(1, "Address is required").max(300),
+  listPrice: z.number().positive("List price must be positive"),
+  beds: z.number().int().min(0).optional(),
+  baths: z.number().min(0).optional(),
+  sqft: z.number().int().min(0).optional(),
+  closeDate: z.string().datetime().optional(),
+  purchasePrice: z.number().positive().optional(),
+  earnestMoney: z.number().positive().optional(),
+});
+

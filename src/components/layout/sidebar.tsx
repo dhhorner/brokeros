@@ -9,6 +9,7 @@ import {
   Sparkles,
   Settings,
   Building2,
+  BookOpen,
 } from "lucide-react";
 import { ThemePicker } from "@/components/layout/theme-picker";
 
@@ -83,6 +84,17 @@ export function Sidebar() {
         })}
 
         <div className="mt-auto border-t border-slate-100">
+          <div className="pt-3 px-2 pb-1">
+            <a
+              href="/guide.html"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-600 hover:bg-slate-50 hover:text-slate-900 transition-colors"
+            >
+              <BookOpen className="h-4 w-4 shrink-0" />
+              User guides
+            </a>
+          </div>
           <div className="pt-3">
             <ThemePicker />
           </div>

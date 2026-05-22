@@ -1,0 +1,922 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>DealPulse — User Guide</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --slate-50:  #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --indigo-50:  #eef2ff;
+      --indigo-100: #e0e7ff;
+      --indigo-500: #6366f1;
+      --indigo-600: #4f46e5;
+      --indigo-700: #4338ca;
+      --green-50:  #f0fdf4;
+      --green-100: #dcfce7;
+      --green-600: #16a34a;
+      --green-700: #15803d;
+      --amber-50:  #fffbeb;
+      --amber-100: #fef3c7;
+      --amber-600: #d97706;
+      --amber-700: #b45309;
+      --red-50:   #fef2f2;
+      --red-100:  #fee2e2;
+      --red-600:  #dc2626;
+      --red-700:  #b91c1c;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--slate-800);
+      background: var(--slate-50);
+    }
+
+    /* ── Layout ── */
+    .page-wrap {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    aside {
+      background: white;
+      border-right: 1px solid var(--slate-200);
+      padding: 32px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo {
+      padding: 0 24px 24px;
+      border-bottom: 1px solid var(--slate-100);
+      margin-bottom: 20px;
+    }
+
+    .sidebar-logo .product {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--indigo-600);
+      letter-spacing: -0.3px;
+    }
+
+    .sidebar-logo .sub {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--slate-400);
+      margin-top: 2px;
+    }
+
+    .nav-section {
+      padding: 0 16px;
+      margin-bottom: 8px;
+    }
+
+    .nav-section-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--slate-400);
+      padding: 0 8px;
+      margin-bottom: 4px;
+    }
+
+    .nav-section a {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 8px;
+      border-radius: 6px;
+      font-size: 13.5px;
+      color: var(--slate-600);
+      text-decoration: none;
+      transition: background 0.1s, color 0.1s;
+    }
+
+    .nav-section a:hover { background: var(--slate-100); color: var(--slate-900); }
+    .nav-section a.active { background: var(--indigo-50); color: var(--indigo-700); font-weight: 500; }
+
+    .nav-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: currentColor;
+      opacity: 0.4;
+      flex-shrink: 0;
+    }
+
+    /* ── Main ── */
+    main {
+      padding: 56px 64px;
+      max-width: 860px;
+    }
+
+    /* ── Hero ── */
+    .hero {
+      margin-bottom: 48px;
+      padding-bottom: 40px;
+      border-bottom: 1px solid var(--slate-200);
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--indigo-600);
+      background: var(--indigo-50);
+      border: 1px solid var(--indigo-100);
+      border-radius: 999px;
+      padding: 3px 12px;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--slate-900);
+      letter-spacing: -0.8px;
+      line-height: 1.15;
+      margin-bottom: 14px;
+    }
+
+    .hero p {
+      font-size: 16px;
+      color: var(--slate-500);
+      max-width: 560px;
+      line-height: 1.7;
+    }
+
+    /* ── Sections ── */
+    section {
+      margin-bottom: 52px;
+      scroll-margin-top: 32px;
+    }
+
+    h2 {
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--slate-900);
+      letter-spacing: -0.4px;
+      margin-bottom: 6px;
+    }
+
+    .section-intro {
+      color: var(--slate-500);
+      font-size: 14.5px;
+      margin-bottom: 24px;
+    }
+
+    h3 {
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--slate-500);
+      margin: 28px 0 12px;
+    }
+
+    p { margin-bottom: 12px; color: var(--slate-600); }
+
+    /* ── Step cards ── */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .step {
+      display: flex;
+      gap: 16px;
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      padding: 20px 20px 20px 20px;
+    }
+
+    .step-num {
+      flex-shrink: 0;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: var(--indigo-600);
+      color: white;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .step-body strong {
+      display: block;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--slate-800);
+      margin-bottom: 4px;
+    }
+
+    .step-body p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--slate-500);
+      line-height: 1.55;
+    }
+
+    /* ── Kanban diagram ── */
+    .kanban-diagram {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin: 24px 0;
+    }
+
+    .k-col {
+      background: var(--slate-100);
+      border-radius: 10px;
+      padding: 12px;
+    }
+
+    .k-col-header {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.7px;
+      color: var(--slate-500);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .k-count {
+      background: var(--slate-200);
+      color: var(--slate-600);
+      border-radius: 999px;
+      width: 18px; height: 18px;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .k-card {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      padding: 10px;
+      margin-bottom: 6px;
+      font-size: 12px;
+    }
+
+    .k-card-addr {
+      font-weight: 600;
+      color: var(--slate-800);
+      margin-bottom: 4px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .k-card-price { color: var(--slate-500); margin-bottom: 6px; }
+
+    /* ── Risk badges ── */
+    .badges { display: flex; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 5px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .badge-dot { width: 7px; height: 7px; border-radius: 50%; }
+
+    .badge-low  { background: var(--green-50);  color: var(--green-700);  border: 1px solid var(--green-100); }
+    .badge-low  .badge-dot { background: var(--green-600); }
+    .badge-med  { background: var(--amber-50);  color: var(--amber-700);  border: 1px solid var(--amber-100); }
+    .badge-med  .badge-dot { background: var(--amber-600); }
+    .badge-high { background: var(--red-50);    color: var(--red-700);    border: 1px solid var(--red-100); }
+    .badge-high .badge-dot { background: var(--red-600); }
+
+    /* ── Risk table ── */
+    .risk-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 16px 0;
+    }
+
+    .risk-table th {
+      text-align: left;
+      padding: 8px 12px;
+      background: var(--slate-100);
+      color: var(--slate-600);
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .risk-table th:first-child { border-radius: 8px 0 0 8px; }
+    .risk-table th:last-child  { border-radius: 0 8px 8px 0; }
+
+    .risk-table td {
+      padding: 10px 12px;
+      border-bottom: 1px solid var(--slate-100);
+      color: var(--slate-600);
+      vertical-align: top;
+    }
+
+    .risk-table td:first-child { font-weight: 500; }
+
+    /* ── Info callouts ── */
+    .callout {
+      display: flex;
+      gap: 12px;
+      padding: 16px;
+      border-radius: 10px;
+      margin: 20px 0;
+      font-size: 14px;
+    }
+
+    .callout-icon { font-size: 18px; flex-shrink: 0; line-height: 1.4; }
+
+    .callout-tip   { background: var(--indigo-50); border: 1px solid var(--indigo-100); color: var(--indigo-700); }
+    .callout-warn  { background: var(--amber-50);  border: 1px solid var(--amber-100);  color: var(--amber-700); }
+    .callout-note  { background: var(--slate-100); border: 1px solid var(--slate-200);  color: var(--slate-700); }
+
+    .callout strong { display: block; margin-bottom: 3px; }
+
+    /* ── Field reference ── */
+    .field-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .field-item {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      padding: 12px 14px;
+    }
+
+    .field-name {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--slate-800);
+      margin-bottom: 3px;
+    }
+
+    .field-req {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      background: var(--red-50);
+      color: var(--red-600);
+      border: 1px solid var(--red-100);
+    }
+
+    .field-opt {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 1px 6px;
+      border-radius: 4px;
+      margin-left: 6px;
+      background: var(--slate-100);
+      color: var(--slate-500);
+    }
+
+    .field-desc { font-size: 13px; color: var(--slate-500); }
+
+    /* ── Party roles ── */
+    .role-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin: 16px 0;
+    }
+
+    .role-row {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      font-size: 14px;
+    }
+
+    .role-tag {
+      flex-shrink: 0;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      padding: 2px 8px;
+      border-radius: 5px;
+      background: var(--slate-100);
+      color: var(--slate-600);
+      min-width: 90px;
+      text-align: center;
+    }
+
+    .role-desc { color: var(--slate-500); }
+
+    /* ── Deadline types ── */
+    .deadline-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .deadline-chip {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--slate-700);
+      text-align: center;
+    }
+
+    /* ── Status flow diagram ── */
+    .status-flow {
+      display: flex;
+      align-items: center;
+      gap: 0;
+      margin: 24px 0;
+    }
+
+    .status-node {
+      flex: 1;
+      background: white;
+      border: 2px solid var(--slate-200);
+      border-radius: 10px;
+      padding: 12px 8px;
+      text-align: center;
+    }
+
+    .status-node .label {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--slate-600);
+      margin-bottom: 4px;
+    }
+
+    .status-node .desc {
+      font-size: 11px;
+      color: var(--slate-400);
+      line-height: 1.4;
+    }
+
+    .status-node.s1 { border-color: var(--indigo-500); }
+    .status-node.s1 .label { color: var(--indigo-600); }
+    .status-node.s2 { border-color: var(--amber-600); }
+    .status-node.s2 .label { color: var(--amber-700); }
+    .status-node.s3 { border-color: var(--red-600); }
+    .status-node.s3 .label { color: var(--red-700); }
+    .status-node.s4 { border-color: var(--green-600); }
+    .status-node.s4 .label { color: var(--green-700); }
+
+    .status-arrow {
+      width: 28px;
+      flex-shrink: 0;
+      text-align: center;
+      color: var(--slate-300);
+      font-size: 18px;
+    }
+
+    /* ── Footer ── */
+    footer {
+      margin-top: 64px;
+      padding-top: 24px;
+      border-top: 1px solid var(--slate-200);
+      font-size: 13px;
+      color: var(--slate-400);
+      display: flex;
+      justify-content: space-between;
+    }
+
+    @media print {
+      aside { display: none; }
+      .page-wrap { grid-template-columns: 1fr; }
+      main { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <!-- Sidebar -->
+  <aside>
+    <div class="sidebar-logo">
+      <div class="product">BrokerOS</div>
+      <div class="sub">User Guide</div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-label">DealPulse</div>
+      <a href="#overview"><span class="nav-dot"></span> Overview</a>
+      <a href="#kanban"><span class="nav-dot"></span> Deals Kanban</a>
+      <a href="#new-deal"><span class="nav-dot"></span> Creating a Deal</a>
+      <a href="#detail"><span class="nav-dot"></span> Deal Detail</a>
+      <a href="#parties"><span class="nav-dot"></span> Parties</a>
+      <a href="#deadlines"><span class="nav-dot"></span> Deadlines</a>
+      <a href="#tasks"><span class="nav-dot"></span> Tasks</a>
+      <a href="#risk"><span class="nav-dot"></span> Risk Scoring</a>
+      <a href="#status"><span class="nav-dot"></span> Status Lifecycle</a>
+    </div>
+  </aside>
+
+  <!-- Content -->
+  <main>
+
+    <!-- Hero -->
+    <div class="hero" id="overview">
+      <div class="hero-eyebrow">BrokerOS Module</div>
+      <h1>DealPulse</h1>
+      <p>Track every transaction from offer to close. DealPulse gives you a live kanban view of all your deals, automatic risk scoring based on deadline proximity, and a structured detail page for each transaction — parties, contingency deadlines, tasks, and documents in one place.</p>
+    </div>
+
+    <!-- Kanban -->
+    <section id="kanban">
+      <h2>Deals Kanban</h2>
+      <p class="section-intro">Your home base. Navigate to <strong>Dashboard → Deals</strong> to see all active transactions organized by stage.</p>
+
+      <div class="kanban-diagram">
+        <div class="k-col">
+          <div class="k-col-header">Active <span class="k-count">2</span></div>
+          <div class="k-card">
+            <div class="k-card-addr">123 Oak St</div>
+            <div class="k-card-price">$485,000</div>
+            <span class="badge badge-low" style="padding:2px 8px;font-size:11px;"><span class="badge-dot"></span>Low</span>
+          </div>
+          <div class="k-card">
+            <div class="k-card-addr">789 Test Lane</div>
+            <div class="k-card-price">$350,000</div>
+          </div>
+        </div>
+        <div class="k-col">
+          <div class="k-col-header">Under Contract <span class="k-count">1</span></div>
+          <div class="k-card">
+            <div class="k-card-addr">456 Maple Ave</div>
+            <div class="k-card-price">$620,000</div>
+            <span class="badge badge-high" style="padding:2px 8px;font-size:11px;"><span class="badge-dot"></span>High</span>
+          </div>
+        </div>
+        <div class="k-col">
+          <div class="k-col-header">Pending Close <span class="k-count">0</span></div>
+        </div>
+        <div class="k-col">
+          <div class="k-col-header">Closed <span class="k-count">1</span></div>
+          <div class="k-card">
+            <div class="k-card-addr">55 Pine Rd</div>
+            <div class="k-card-price">$310,000</div>
+          </div>
+        </div>
+      </div>
+
+      <h3>Toolbar actions</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Run risk check</strong>
+            <p>Recalculates risk scores for every open deal (Active, Under Contract, Pending Close) right now. The button shows a spinner while running and confirms how many deals were updated. Use this any time you've added or completed a deadline and want an immediate refresh.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>New deal</strong>
+            <p>Opens the new deal form — see <a href="#new-deal">Creating a Deal</a> below.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- New deal -->
+    <section id="new-deal">
+      <h2>Creating a Deal</h2>
+      <p class="section-intro">Click <strong>New deal</strong> in the kanban toolbar. A slide-out panel opens with two sections.</p>
+
+      <h3>Property fields</h3>
+      <div class="field-grid">
+        <div class="field-item">
+          <div class="field-name">Address <span class="field-req">required</span></div>
+          <div class="field-desc">Full street address including city and state. Example: 123 Main St, Austin TX 78701</div>
+        </div>
+        <div class="field-item">
+          <div class="field-name">List price <span class="field-req">required</span></div>
+          <div class="field-desc">The listed asking price in dollars. Must be a positive number.</div>
+        </div>
+        <div class="field-item">
+          <div class="field-name">Beds <span class="field-opt">optional</span></div>
+          <div class="field-desc">Number of bedrooms.</div>
+        </div>
+        <div class="field-item">
+          <div class="field-name">Baths <span class="field-opt">optional</span></div>
+          <div class="field-desc">Number of bathrooms. Supports half-baths (e.g. 2.5).</div>
+        </div>
+        <div class="field-item">
+          <div class="field-name">Sq ft <span class="field-opt">optional</span></div>
+          <div class="field-desc">Total square footage of the property.</div>
+        </div>
+      </div>
+
+      <h3>Transaction fields</h3>
+      <div class="field-grid">
+        <div class="field-item">
+          <div class="field-name">Target close date <span class="field-opt">optional</span></div>
+          <div class="field-desc">The anticipated closing date. Used by the risk engine to flag deals approaching close with incomplete contingencies.</div>
+        </div>
+        <div class="field-item">
+          <div class="field-name">Purchase price <span class="field-opt">optional</span></div>
+          <div class="field-desc">The agreed-upon purchase price, which may differ from the list price.</div>
+        </div>
+        <div class="field-item">
+          <div class="field-name">Earnest money <span class="field-opt">optional</span></div>
+          <div class="field-desc">The earnest money deposit amount.</div>
+        </div>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>Only address and list price are required to create a deal.</strong> All other fields can be filled in later from the deal's detail page. You cannot change the close date from the detail page yet — set it here if you know it.</div>
+      </div>
+
+      <p>After clicking <strong>Create deal</strong> the panel closes and the new deal appears in the <strong>Active</strong> column. Click the card to open the detail page and fill in the rest.</p>
+    </section>
+
+    <!-- Detail -->
+    <section id="detail">
+      <h2>Deal Detail Page</h2>
+      <p class="section-intro">Click any deal card to open its detail page at <code style="background:var(--slate-100);padding:1px 6px;border-radius:4px;font-size:13px;">/dashboard/deals/[id]</code>.</p>
+
+      <p>The header shows the property address, list price, purchase price (if set), earnest money, close date, current risk score, and any active risk flags. A status selector lets you move the deal through its lifecycle.</p>
+
+      <p>Below the header the page is divided into four sections: <strong>Parties</strong>, <strong>Deadlines</strong>, <strong>Tasks</strong>, and <strong>Documents</strong>.</p>
+
+      <div class="callout callout-note">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Document uploads are not yet available.</strong> The Documents section shows a placeholder. You can track documents manually in Tasks or Deadlines notes in the meantime.</div>
+      </div>
+    </section>
+
+    <!-- Parties -->
+    <section id="parties">
+      <h2>Parties</h2>
+      <p class="section-intro">Record everyone involved in the transaction — buyer, seller, agents, lender, and more.</p>
+
+      <h3>Supported roles</h3>
+      <div class="role-list">
+        <div class="role-row"><span class="role-tag">Buyer</span><span class="role-desc">The purchasing party.</span></div>
+        <div class="role-row"><span class="role-tag">Seller</span><span class="role-desc">The selling party.</span></div>
+        <div class="role-row"><span class="role-tag">Agent</span><span class="role-desc">Real estate agent on either side.</span></div>
+        <div class="role-row"><span class="role-tag">Lender</span><span class="role-desc">Mortgage lender or loan officer.</span></div>
+        <div class="role-row"><span class="role-tag">Attorney</span><span class="role-desc">Transaction or closing attorney.</span></div>
+        <div class="role-row"><span class="role-tag">Inspector</span><span class="role-desc">Home or specialist inspector.</span></div>
+        <div class="role-row"><span class="role-tag">Title</span><span class="role-desc">Title company or escrow officer.</span></div>
+        <div class="role-row"><span class="role-tag">Other</span><span class="role-desc">Any other party involved in the transaction.</span></div>
+      </div>
+
+      <h3>Adding a party</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Click "Add party" in the Parties section.</strong>
+            <p>An inline form expands below the existing party list.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Fill in name (required), role (required), email, and phone.</strong>
+            <p>Email and phone are optional but useful for quick reference from the detail page.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">3</div>
+          <div class="step-body">
+            <strong>Click "Add" to save.</strong>
+            <p>The new party appears in the list immediately. There is no limit on the number of parties per deal.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Deadlines -->
+    <section id="deadlines">
+      <h2>Contingency Deadlines</h2>
+      <p class="section-intro">Deadlines are the core input for risk scoring. Each deadline represents a contingency that must be satisfied before closing. Track them here and check them off when done.</p>
+
+      <h3>Deadline types</h3>
+      <div class="deadline-grid">
+        <div class="deadline-chip">Inspection</div>
+        <div class="deadline-chip">Financing</div>
+        <div class="deadline-chip">Appraisal</div>
+        <div class="deadline-chip">Title</div>
+        <div class="deadline-chip">HOA Review</div>
+        <div class="deadline-chip">Other</div>
+      </div>
+
+      <h3>Adding a deadline</h3>
+      <p>In the Deadlines section, click <strong>Add deadline</strong>. Select the type, enter a due date, and add optional notes (e.g. contact info for the inspector or lender). Click <strong>Add</strong> to save.</p>
+
+      <h3>Completing a deadline</h3>
+      <p>When a contingency has been satisfied, click the checkbox next to it. The deadline is stamped with the completion time and removed from the risk engine's consideration. Completed deadlines appear greyed out.</p>
+
+      <div class="callout callout-warn">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Deadlines directly drive the risk score.</strong> An overdue incomplete deadline immediately sets the deal to High risk. Add deadlines as soon as they are agreed upon and check them off promptly so your risk view stays accurate.</div>
+      </div>
+    </section>
+
+    <!-- Tasks -->
+    <section id="tasks">
+      <h2>Tasks</h2>
+      <p class="section-intro">Tasks are free-form to-dos attached to a deal — scheduling appointments, following up with a lender, ordering surveys, etc.</p>
+
+      <h3>Adding a task</h3>
+      <p>Click <strong>Add task</strong> in the Tasks section. Enter a title and an optional due date, then click <strong>Add</strong>. Tasks can also be assigned (a free-text field for name or initials).</p>
+
+      <h3>Completing a task</h3>
+      <p>Click the checkbox next to a task. The task moves to a completed state. Tasks with a past due date that are still open are highlighted in red.</p>
+
+      <div class="callout callout-note">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Tasks are also visible across all deals</strong> from the main Tasks page in the dashboard, where they are sorted by due date so you can see your full workload at a glance.</div>
+      </div>
+    </section>
+
+    <!-- Risk -->
+    <section id="risk">
+      <h2>Risk Scoring</h2>
+      <p class="section-intro">Each open deal gets a risk score — Low, Medium, or High — based on its contingency deadlines and close date.</p>
+
+      <div class="badges">
+        <span class="badge badge-low"><span class="badge-dot"></span> Low Risk</span>
+        <span class="badge badge-med"><span class="badge-dot"></span> Medium Risk</span>
+        <span class="badge badge-high"><span class="badge-dot"></span> High Risk</span>
+      </div>
+
+      <table class="risk-table">
+        <thead>
+          <tr>
+            <th>Score</th>
+            <th>Triggered when…</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><span class="badge badge-high" style="padding:3px 10px;font-size:12px;"><span class="badge-dot"></span>High</span></td>
+            <td>Any incomplete deadline is <strong>overdue</strong>, OR the close date is <strong>within 14 days</strong> and at least one contingency is still incomplete.</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-med" style="padding:3px 10px;font-size:12px;"><span class="badge-dot"></span>Medium</span></td>
+            <td>Any incomplete deadline is <strong>due within 3 days</strong> (but none are overdue and close is not imminent).</td>
+          </tr>
+          <tr>
+            <td><span class="badge badge-low" style="padding:3px 10px;font-size:12px;"><span class="badge-dot"></span>Low</span></td>
+            <td>No deadlines are overdue or immediately upcoming, and close is not within 14 days with open contingencies.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Updating scores</h3>
+      <p>Scores are updated in two ways:</p>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">M</div>
+          <div class="step-body">
+            <strong>Manually — "Run risk check" button</strong>
+            <p>Click the button in the kanban toolbar to run an immediate check for all your open deals. Use this after adding or completing a deadline when you want the kanban badges to refresh right away.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">A</div>
+          <div class="step-body">
+            <strong>Automatically — background worker</strong>
+            <p>A scheduled worker runs in the background on a regular cadence. When a deal escalates to High, the worker sends an email alert to the brokerage owner automatically — no action needed.</p>
+          </div>
+        </div>
+      </div>
+
+      <h3>Risk flags</h3>
+      <p>On the deal detail page, specific flag messages appear below the risk badge explaining exactly what triggered the score. For example: <em>"INSPECTION deadline is overdue (was due 5/15/2026)"</em> or <em>"Close date is within 14 days with 2 incomplete contingencies."</em> These flags update every time a risk check runs.</p>
+    </section>
+
+    <!-- Status -->
+    <section id="status">
+      <h2>Status Lifecycle</h2>
+      <p class="section-intro">Change a deal's status from the selector on its detail page. Deals move from left to right through four stages.</p>
+
+      <div class="status-flow">
+        <div class="status-node s1">
+          <div class="label">Active</div>
+          <div class="desc">Offer made, deal being worked</div>
+        </div>
+        <div class="status-arrow">→</div>
+        <div class="status-node s2">
+          <div class="label">Under Contract</div>
+          <div class="desc">Purchase agreement signed</div>
+        </div>
+        <div class="status-arrow">→</div>
+        <div class="status-node s3">
+          <div class="label">Pending Close</div>
+          <div class="desc">All contingencies cleared</div>
+        </div>
+        <div class="status-arrow">→</div>
+        <div class="status-node s4">
+          <div class="label">Closed</div>
+          <div class="desc">Transaction complete</div>
+        </div>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-icon">ℹ️</div>
+        <div>The risk engine only runs on <strong>Active</strong>, <strong>Under Contract</strong>, and <strong>Pending Close</strong> deals. Closed deals are excluded from risk checks and will not appear in the risk check count.</div>
+      </div>
+
+      <p>There is no enforced one-way flow — you can move a deal back to any stage if needed. The kanban column updates immediately when the status changes.</p>
+    </section>
+
+    <footer>
+      <span>BrokerOS — DealPulse User Guide</span>
+      <span>Last updated May 2026</span>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  const navLinks = document.querySelectorAll(".nav-section a");
+  const sectionIds = ["overview","kanban","new-deal","detail","parties","deadlines","tasks","risk","status"];
+
+  function setActive(id) {
+    navLinks.forEach((a) => {
+      const matches = a.getAttribute("href") === "#" + id;
+      a.classList.toggle("active", matches);
+    });
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      // Pick the topmost visible section
+      const visible = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible.length) setActive(visible[0].target.id);
+    },
+    { rootMargin: "0px 0px -60% 0px", threshold: 0 }
+  );
+
+  sectionIds.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  // Set initial active on load based on hash or first section
+  const initial = location.hash ? location.hash.slice(1) : "overview";
+  setActive(initial);
+</script>
+</body>
+</html>

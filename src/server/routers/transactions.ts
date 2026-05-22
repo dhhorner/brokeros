@@ -9,7 +9,9 @@ import {
   completeDeadlineSchema,
   createTaskSchema,
   completeTaskSchema,
+  createWithPropertySchema,
 } from "@/lib/schemas/transaction";
+import { computeRiskScore } from "@/lib/risk-engine";
 
 const transactionSelect = {
   id: true,
@@ -289,6 +291,59 @@ export const transactionsRouter = createTRPCRouter({
         data: { completedAt: new Date(), status: "COMPLETED" },
         select: { id: true, completedAt: true, status: true },
       });
+    }),
+
+  // ─── Create deal + property atomically ────────────────────────────────────
+
+  createWithProperty: brokerageProcedure
+    .input(createWithPropertySchema)
+    .mutation(async ({ ctx, input }) => {
+      return ctx.db.$transaction(async (tx) => {
+        const property = await tx.property.create({
+          data: {
+            brokerageId: ctx.brokerageId,
+            address: input.address,
+            price: input.listPrice,
+            beds: input.beds ?? null,
+            baths: input.baths ?? null,
+            sqft: input.sqft ?? null,
+          },
+          select: { id: true },
+        });
+        return tx.transaction.create({
+          data: {
+            brokerageId: ctx.brokerageId,
+            propertyId: property.id,
+            closeDate: input.closeDate ? new Date(input.closeDate) : null,
+            purchasePrice: input.purchasePrice ?? null,
+            earnestMoney: input.earnestMoney ?? null,
+          },
+          select: transactionSelect,
+        });
+      });
+    }),
+
+  // ─── Manual risk check ────────────────────────────────────────────────────
+
+  runRiskCheck: brokerageProcedure
+    .mutation(async ({ ctx }) => {
+      const openTransactions = await ctx.db.transaction.findMany({
+        where: {
+          brokerageId: ctx.brokerageId,
+          status: { in: ["ACTIVE", "UNDER_CONTRACT", "PENDING_CLOSE"] },
+        },
+        include: { deadlines: true },
+      });
+
+      for (const transaction of openTransactions) {
+        const { score, flags } = computeRiskScore(transaction);
+        await ctx.db.transaction.update({
+          where: { id: transaction.id },
+          data: { riskScore: score, riskFlags: flags },
+        });
+      }
+
+      return { checked: openTransactions.length };
     }),
 
   // ─── Tasks across all transactions ────────────────────────────────────────
