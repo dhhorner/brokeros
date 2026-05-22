@@ -40,6 +40,7 @@ const newLeadFormSchema = z.object({
   phone: z.string().max(20).optional(),
   status: z.enum(["NEW", "CONTACTED", "QUALIFIED", "NURTURING", "CLOSED_WON", "CLOSED_LOST"]),
   source: z.enum(["MANUAL", "MLS", "WEBSITE", "REFERRAL", "SOCIAL", "OTHER"]),
+  assignedTo: z.string().optional(),
   notes: z.string().max(2000).optional(),
 });
 
@@ -51,6 +52,7 @@ const SOURCES = ["MANUAL", "MLS", "WEBSITE", "REFERRAL", "SOCIAL", "OTHER"] as c
 export function NewLeadSheet() {
   const [open, setOpen] = useState(false);
   const utils = trpc.useUtils();
+  const { data: members } = trpc.leads.brokerageMembers.useQuery();
 
   const createLead = trpc.leads.create.useMutation({
     onSuccess: () => {
@@ -68,6 +70,7 @@ export function NewLeadSheet() {
       phone: "",
       status: "NEW",
       source: "MANUAL",
+      assignedTo: "",
       notes: "",
     },
   });
@@ -79,6 +82,7 @@ export function NewLeadSheet() {
       phone: data.phone || undefined,
       status: data.status,
       source: data.source,
+      assignedTo: data.assignedTo || undefined,
       notes: data.notes || undefined,
     });
   }
@@ -197,6 +201,31 @@ export function NewLeadSheet() {
                 )}
               />
             </div>
+
+            <FormField
+              control={form.control}
+              name="assignedTo"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Assign to</FormLabel>
+                  <Select onValueChange={field.onChange} value={field.value}>
+                    <FormControl>
+                      <SelectTrigger>
+                        <SelectValue placeholder="Unassigned" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent>
+                      <SelectItem value="">Unassigned</SelectItem>
+                      {members?.map((m) => (
+                        <SelectItem key={m.id} value={m.id}>
+                          {m.name ?? m.email}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </FormItem>
+              )}
+            />
 
             <FormField
               control={form.control}

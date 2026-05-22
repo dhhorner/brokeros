@@ -37,6 +37,7 @@ const editLeadFormSchema = z.object({
   phone: z.string().max(20).optional(),
   status: z.enum(["NEW", "CONTACTED", "QUALIFIED", "NURTURING", "CLOSED_WON", "CLOSED_LOST"]),
   source: z.enum(["MANUAL", "MLS", "WEBSITE", "REFERRAL", "SOCIAL", "OTHER"]),
+  assignedTo: z.string().optional(),
   notes: z.string().max(2000).optional(),
 });
 
@@ -53,6 +54,7 @@ interface EditLeadSheetProps {
 
 export function EditLeadSheet({ leadId, open, onOpenChange }: EditLeadSheetProps) {
   const utils = trpc.useUtils();
+  const { data: members } = trpc.leads.brokerageMembers.useQuery();
 
   const { data: lead, isLoading } = trpc.leads.getById.useQuery(
     { id: leadId! },
@@ -74,6 +76,7 @@ export function EditLeadSheet({ leadId, open, onOpenChange }: EditLeadSheetProps
       phone: "",
       status: "NEW",
       source: "MANUAL",
+      assignedTo: "",
       notes: "",
     },
   });
@@ -86,6 +89,7 @@ export function EditLeadSheet({ leadId, open, onOpenChange }: EditLeadSheetProps
         phone: lead.phone ?? "",
         status: lead.status,
         source: lead.source,
+        assignedTo: lead.assignedTo ?? "",
         notes: lead.notes ?? "",
       });
     }
@@ -100,6 +104,7 @@ export function EditLeadSheet({ leadId, open, onOpenChange }: EditLeadSheetProps
       phone: data.phone || undefined,
       status: data.status,
       source: data.source,
+      assignedTo: data.assignedTo || undefined,
       notes: data.notes || undefined,
     });
   }
@@ -214,6 +219,31 @@ export function EditLeadSheet({ leadId, open, onOpenChange }: EditLeadSheetProps
                   )}
                 />
               </div>
+
+              <FormField
+                control={form.control}
+                name="assignedTo"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Assign to</FormLabel>
+                    <Select onValueChange={field.onChange} value={field.value}>
+                      <FormControl>
+                        <SelectTrigger>
+                          <SelectValue placeholder="Unassigned" />
+                        </SelectTrigger>
+                      </FormControl>
+                      <SelectContent>
+                        <SelectItem value="">Unassigned</SelectItem>
+                        {members?.map((m) => (
+                          <SelectItem key={m.id} value={m.id}>
+                            {m.name ?? m.email}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </FormItem>
+                )}
+              />
 
               <FormField
                 control={form.control}

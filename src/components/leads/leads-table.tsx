@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { trpc } from "@/lib/trpc/client";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -18,12 +19,13 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { LeadStatus, LeadSource } from "@prisma/client";
 import { useState } from "react";
 import { NewLeadSheet } from "./new-lead-sheet";
 import { EditLeadSheet } from "./edit-lead-sheet";
 import { format } from "date-fns";
-import { Pencil, Trash2 } from "lucide-react";
+import { Pencil, Trash2, Search, X } from "lucide-react";
 import {
   Dialog,
   DialogContent,
@@ -32,6 +34,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useDebounce } from "@/lib/use-debounce";
 
 const statusColors: Record<LeadStatus, string> = {
   NEW: "bg-blue-100 text-blue-700",
@@ -45,8 +48,11 @@ const statusColors: Record<LeadStatus, string> = {
 export function LeadsTable() {
   const [statusFilter, setStatusFilter] = useState<LeadStatus | "ALL">("ALL");
   const [sourceFilter, setSourceFilter] = useState<LeadSource | "ALL">("ALL");
+  const [searchInput, setSearchInput] = useState("");
   const [editingLeadId, setEditingLeadId] = useState<string | null>(null);
   const [deletingLead, setDeletingLead] = useState<{ id: string; name: string } | null>(null);
+
+  const search = useDebounce(searchInput, 300);
 
   const utils = trpc.useUtils();
   const deleteLead = trpc.leads.delete.useMutation({
@@ -59,14 +65,36 @@ export function LeadsTable() {
   const { data, isLoading, isError } = trpc.leads.list.useQuery({
     status: statusFilter !== "ALL" ? statusFilter : undefined,
     source: sourceFilter !== "ALL" ? sourceFilter : undefined,
+    search: search || undefined,
     limit: 50,
   });
+
+  const hasFilters = statusFilter !== "ALL" || sourceFilter !== "ALL" || searchInput !== "";
 
   return (
     <div className="space-y-4">
       {/* Toolbar */}
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <div className="flex items-center justify-between gap-3">
+        <div className="flex items-center gap-3 flex-1">
+          {/* Search */}
+          <div className="relative w-56">
+            <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-slate-400" />
+            <Input
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Search name or email…"
+              className="pl-8 h-9 text-sm"
+            />
+            {searchInput && (
+              <button
+                onClick={() => setSearchInput("")}
+                className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              >
+                <X className="h-3.5 w-3.5" />
+              </button>
+            )}
+          </div>
+
           <Select
             value={statusFilter}
             onValueChange={(v) => setStatusFilter(v as LeadStatus | "ALL")}
@@ -101,13 +129,14 @@ export function LeadsTable() {
             </SelectContent>
           </Select>
 
-          {(statusFilter !== "ALL" || sourceFilter !== "ALL") && (
+          {hasFilters && (
             <Button
               variant="ghost"
               size="sm"
               onClick={() => {
                 setStatusFilter("ALL");
                 setSourceFilter("ALL");
+                setSearchInput("");
               }}
             >
               Clear filters
@@ -149,17 +178,21 @@ export function LeadsTable() {
             {data?.leads.length === 0 && !isLoading && (
               <TableRow>
                 <TableCell colSpan={6} className="py-12 text-center text-slate-400">
-                  No leads found. Add your first lead to get started.
+                  {hasFilters ? "No leads match your filters." : "No leads found. Add your first lead to get started."}
                 </TableCell>
               </TableRow>
             )}
             {data?.leads.map((lead) => (
               <TableRow key={lead.id} className="hover:bg-slate-50 group">
                 <TableCell>
-                  <div className="font-medium text-slate-900">{lead.name}</div>
-                  {lead.email && (
-                    <div className="text-xs text-slate-500">{lead.email}</div>
-                  )}
+                  <Link href={`/dashboard/leads/${lead.id}`} className="block">
+                    <div className="font-medium text-slate-900 hover:text-blue-600 transition-colors">
+                      {lead.name}
+                    </div>
+                    {lead.email && (
+                      <div className="text-xs text-slate-500">{lead.email}</div>
+                    )}
+                  </Link>
                 </TableCell>
                 <TableCell>
                   <span

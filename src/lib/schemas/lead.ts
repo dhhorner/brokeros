@@ -19,6 +19,7 @@ export const listLeadsSchema = z.object({
   status: z.nativeEnum(LeadStatus).optional(),
   source: z.nativeEnum(LeadSource).optional(),
   assignedTo: z.string().cuid().optional(),
+  search: z.string().max(100).optional(),
   limit: z.number().int().min(1).max(100).default(50),
   cursor: z.string().cuid().optional(),
 });

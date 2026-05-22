@@ -5,8 +5,11 @@ import { trpc } from "@/lib/trpc/client";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { format, isToday, isTomorrow, isPast } from "date-fns";
 import { cn } from "@/lib/utils";
+import { Plus, X } from "lucide-react";
 
 type TaskStatus = "OPEN" | "COMPLETED";
 
@@ -26,6 +29,88 @@ function TaskSkeleton() {
     </div>
   );
 }
+
+// ─── Add task inline form ──────────────────────────────────────────────────────
+
+function AddTaskForm({ onAdded }: { onAdded: () => void }) {
+  const utils = trpc.useUtils();
+  const [open, setOpen] = useState(false);
+  const [title, setTitle] = useState("");
+  const [dueDate, setDueDate] = useState("");
+
+  const createTask = trpc.transactions.createTask.useMutation({
+    onSuccess: () => {
+      utils.transactions.listTasks.invalidate({ status: "OPEN" });
+      setTitle("");
+      setDueDate("");
+      setOpen(false);
+      onAdded();
+    },
+  });
+
+  if (!open) {
+    return (
+      <button
+        onClick={() => setOpen(true)}
+        className="flex items-center gap-1.5 w-full px-4 py-2 text-xs text-slate-400 hover:text-slate-600 hover:bg-slate-50 transition-colors text-left"
+      >
+        <Plus className="h-3.5 w-3.5" />
+        Add task
+      </button>
+    );
+  }
+
+  function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!title.trim()) return;
+    createTask.mutate({
+      title: title.trim(),
+      dueDate: dueDate ? new Date(dueDate).toISOString() : undefined,
+    });
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="px-4 py-3 space-y-2 border-b border-slate-100 bg-slate-50">
+      <Input
+        autoFocus
+        placeholder="Task title…"
+        value={title}
+        onChange={(e) => setTitle(e.target.value)}
+        className="h-8 text-sm"
+      />
+      <div className="flex items-center gap-2">
+        <Input
+          type="date"
+          value={dueDate}
+          onChange={(e) => setDueDate(e.target.value)}
+          className="h-8 text-sm flex-1"
+        />
+        <Button
+          type="submit"
+          size="sm"
+          className="h-8"
+          disabled={!title.trim() || createTask.isPending}
+        >
+          {createTask.isPending ? "Adding…" : "Add"}
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          className="h-8 w-8 text-slate-400"
+          onClick={() => { setOpen(false); setTitle(""); setDueDate(""); }}
+        >
+          <X className="h-3.5 w-3.5" />
+        </Button>
+      </div>
+      {createTask.error && (
+        <p className="text-xs text-red-600">{createTask.error.message}</p>
+      )}
+    </form>
+  );
+}
+
+// ─── Task list ─────────────────────────────────────────────────────────────────
 
 function TaskList({ status }: { status: TaskStatus }) {
   const { data: tasks, isLoading } = trpc.transactions.listTasks.useQuery({ status });
@@ -119,6 +204,8 @@ function TaskList({ status }: { status: TaskStatus }) {
   );
 }
 
+// ─── Main task queue ───────────────────────────────────────────────────────────
+
 export function TaskQueue() {
   const [activeTab, setActiveTab] = useState<TaskStatus>("OPEN");
 
@@ -139,8 +226,11 @@ export function TaskQueue() {
         <TabsTrigger value="COMPLETED">Completed</TabsTrigger>
       </TabsList>
 
-      <TabsContent value="OPEN" className="flex-1 overflow-hidden mt-0">
-        <TaskList status="OPEN" />
+      <TabsContent value="OPEN" className="flex-1 overflow-hidden mt-0 flex flex-col">
+        <AddTaskForm onAdded={() => {}} />
+        <div className="flex-1 overflow-hidden">
+          <TaskList status="OPEN" />
+        </div>
       </TabsContent>
       <TabsContent value="COMPLETED" className="flex-1 overflow-hidden mt-0">
         <TaskList status="COMPLETED" />

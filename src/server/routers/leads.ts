@@ -1,6 +1,5 @@
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
-import { type Lead, type User } from "@prisma/client";
 import { createTRPCRouter, brokerageProcedure } from "../trpc";
 import {
   createLeadSchema,
@@ -34,7 +33,7 @@ export const leadsRouter = createTRPCRouter({
   list: brokerageProcedure
     .input(listLeadsSchema)
     .query(async ({ ctx, input }) => {
-      const { status, source, assignedTo, limit, cursor } = input;
+      const { status, source, assignedTo, search, limit, cursor } = input;
 
       const leads = await ctx.db.lead.findMany({
         where: {
@@ -42,6 +41,12 @@ export const leadsRouter = createTRPCRouter({
           ...(status && { status }),
           ...(source && { source }),
           ...(assignedTo && { assignedTo }),
+          ...(search && {
+            OR: [
+              { name: { contains: search, mode: "insensitive" } },
+              { email: { contains: search, mode: "insensitive" } },
+            ],
+          }),
         },
         select: {
           id: true,
@@ -95,7 +100,9 @@ export const leadsRouter = createTRPCRouter({
               status: true,
               currentStep: true,
               nextSendAt: true,
+              createdAt: true,
             },
+            orderBy: { createdAt: "desc" },
           },
         },
       });
@@ -137,6 +144,7 @@ export const leadsRouter = createTRPCRouter({
         data: {
           ...data,
           email: data.email === "" ? null : data.email,
+          assignedTo: data.assignedTo ?? null,
         },
         select: {
           id: true,
@@ -147,6 +155,80 @@ export const leadsRouter = createTRPCRouter({
           assignedTo: true,
           updatedAt: true,
         },
+      });
+    }),
+
+  // ─── Brokerage members (for assignee picker) ─────────────────────────────
+
+  brokerageMembers: brokerageProcedure
+    .query(async ({ ctx }) => {
+      return ctx.db.user.findMany({
+        where: { brokerageId: ctx.brokerageId },
+        select: { id: true, name: true, email: true },
+        orderBy: { name: "asc" },
+      });
+    }),
+
+  // ─── Nurture sequences ────────────────────────────────────────────────────
+
+  startSequence: brokerageProcedure
+    .input(z.object({ leadId: z.string().cuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const lead = await ctx.db.lead.findFirst({
+        where: { id: input.leadId, brokerageId: ctx.brokerageId },
+        select: { id: true },
+      });
+      if (!lead) {
+        throw new TRPCError({ code: "NOT_FOUND" });
+      }
+
+      return ctx.db.nurtureSequence.create({
+        data: {
+          brokerageId: ctx.brokerageId,
+          leadId: input.leadId,
+          status: "ACTIVE",
+          currentStep: 0,
+          nextSendAt: new Date(Date.now() + 24 * 60 * 60 * 1000), // 24h from now
+        },
+        select: {
+          id: true,
+          status: true,
+          currentStep: true,
+          nextSendAt: true,
+          createdAt: true,
+        },
+      });
+    }),
+
+  pauseSequence: brokerageProcedure
+    .input(z.object({ id: z.string().cuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const seq = await ctx.db.nurtureSequence.findFirst({
+        where: { id: input.id, brokerageId: ctx.brokerageId },
+        select: { id: true },
+      });
+      if (!seq) throw new TRPCError({ code: "NOT_FOUND" });
+
+      return ctx.db.nurtureSequence.update({
+        where: { id: input.id },
+        data: { status: "PAUSED" },
+        select: { id: true, status: true },
+      });
+    }),
+
+  cancelSequence: brokerageProcedure
+    .input(z.object({ id: z.string().cuid() }))
+    .mutation(async ({ ctx, input }) => {
+      const seq = await ctx.db.nurtureSequence.findFirst({
+        where: { id: input.id, brokerageId: ctx.brokerageId },
+        select: { id: true },
+      });
+      if (!seq) throw new TRPCError({ code: "NOT_FOUND" });
+
+      return ctx.db.nurtureSequence.update({
+        where: { id: input.id },
+        data: { status: "CANCELLED" },
+        select: { id: true, status: true },
       });
     }),
 });
