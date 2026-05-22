@@ -8,8 +8,8 @@ const THEMES: { value: Theme; label: string }[] = [
   { value: "clean-slate", label: "Clean Slate" },
   { value: "executive-dark", label: "Executive Dark" },
   { value: "modern-warm", label: "Modern Warm" },
-  { value: "sky-blue", label: "Sky Blue" },
   { value: "sage-green", label: "Sage Green" },
+  { value: "sky-blue", label: "Sky Blue" },
 ];
 
 const ThemeContext = createContext<{
@@ -23,7 +23,7 @@ const ThemeContext = createContext<{
 });
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("clean-slate");
+  const [theme, setThemeState] = useState<Theme>("sage-green");
 
   useEffect(() => {
     const saved = localStorage.getItem("brokeros-theme") as Theme | null;
