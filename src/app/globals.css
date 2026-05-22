@@ -165,3 +165,131 @@
 [data-theme="modern-warm"] .theme-icon,
 [data-theme="modern-warm"] .theme-label { color: hsl(25 16% 48%); }
 
+/* ─── Sky Blue ───────────────────────────────────────────────────────────── */
+
+[data-theme="sky-blue"] {
+  --color-primary: hsl(206 80% 42%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-background: hsl(206 40% 97%);
+  --color-foreground: hsl(210 30% 14%);
+  --color-border: hsl(206 30% 86%);
+  --color-muted: hsl(206 30% 93%);
+  --color-muted-foreground: hsl(210 18% 46%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(210 30% 14%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(210 30% 14%);
+  --color-accent: hsl(206 30% 93%);
+  --color-accent-foreground: hsl(210 30% 14%);
+  --color-input: hsl(206 30% 86%);
+}
+
+/* Surfaces */
+[data-theme="sky-blue"] .bg-white    { background-color: hsl(0 0% 100%); }
+[data-theme="sky-blue"] .bg-slate-50 { background-color: hsl(206 35% 95%); }
+[data-theme="sky-blue"] .bg-slate-100{ background-color: hsl(206 32% 90%); }
+[data-theme="sky-blue"] .bg-slate-200{ background-color: hsl(206 26% 82%); }
+
+/* Hover surfaces */
+[data-theme="sky-blue"] .hover\:bg-slate-50:hover  { background-color: hsl(206 30% 96%); }
+[data-theme="sky-blue"] .hover\:bg-slate-100:hover { background-color: hsl(206 28% 92%); }
+[data-theme="sky-blue"] .hover\:bg-red-50:hover    { background-color: hsl(0 60% 97%); }
+
+/* Text */
+[data-theme="sky-blue"] .text-slate-900 { color: hsl(210 30% 12%); }
+[data-theme="sky-blue"] .text-slate-800 { color: hsl(210 26% 20%); }
+[data-theme="sky-blue"] .text-slate-700 { color: hsl(210 22% 30%); }
+[data-theme="sky-blue"] .text-slate-600 { color: hsl(210 18% 40%); }
+[data-theme="sky-blue"] .text-slate-500 { color: hsl(210 15% 50%); }
+[data-theme="sky-blue"] .text-slate-400 { color: hsl(210 12% 62%); }
+
+/* Borders */
+[data-theme="sky-blue"] .border-slate-200 { border-color: hsl(206 30% 86%); }
+[data-theme="sky-blue"] .border-slate-100 { border-color: hsl(206 28% 92%); }
+
+/* Sidebar */
+[data-theme="sky-blue"] aside                    { background-color: hsl(206 55% 92%); border-color: hsl(206 30% 84%); }
+[data-theme="sky-blue"] aside .border-b          { border-color: hsl(206 30% 84%); }
+[data-theme="sky-blue"] aside .border-t          { border-color: hsl(206 28% 87%); }
+[data-theme="sky-blue"] aside .bg-slate-900      { background-color: hsl(206 80% 42%); }
+[data-theme="sky-blue"] aside .text-slate-900    { color: hsl(210 30% 12%); }
+[data-theme="sky-blue"] aside .bg-slate-100      { background-color: hsl(206 50% 84%); }
+[data-theme="sky-blue"] aside .bg-slate-50       { background-color: transparent; }
+[data-theme="sky-blue"] aside .text-slate-600    { color: hsl(210 18% 38%); }
+[data-theme="sky-blue"] aside .text-slate-400    { color: hsl(210 14% 52%); }
+[data-theme="sky-blue"] aside a:hover            { background-color: hsl(206 45% 86%); color: hsl(210 30% 12%); }
+
+/* Topbar */
+[data-theme="sky-blue"] header                   { background-color: hsl(0 0% 100%); border-color: hsl(206 30% 86%); }
+[data-theme="sky-blue"] header .text-slate-900   { color: hsl(210 30% 12%); }
+[data-theme="sky-blue"] header .text-slate-500   { color: hsl(210 15% 50%); }
+[data-theme="sky-blue"] header .text-slate-700   { color: hsl(210 22% 30%); }
+
+/* Theme picker chrome */
+[data-theme="sky-blue"] .theme-icon,
+[data-theme="sky-blue"] .theme-label { color: hsl(210 18% 46%); }
+
+/* ─── Sage Green ─────────────────────────────────────────────────────────── */
+
+[data-theme="sage-green"] {
+  --color-primary: hsl(152 40% 36%);
+  --color-primary-foreground: hsl(0 0% 100%);
+  --color-background: hsl(150 25% 97%);
+  --color-foreground: hsl(155 20% 12%);
+  --color-border: hsl(148 20% 84%);
+  --color-muted: hsl(150 20% 92%);
+  --color-muted-foreground: hsl(152 12% 46%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(155 20% 12%);
+  --color-popover: hsl(0 0% 100%);
+  --color-popover-foreground: hsl(155 20% 12%);
+  --color-accent: hsl(150 20% 92%);
+  --color-accent-foreground: hsl(155 20% 12%);
+  --color-input: hsl(148 20% 84%);
+}
+
+/* Surfaces */
+[data-theme="sage-green"] .bg-white    { background-color: hsl(0 0% 100%); }
+[data-theme="sage-green"] .bg-slate-50 { background-color: hsl(150 22% 95%); }
+[data-theme="sage-green"] .bg-slate-100{ background-color: hsl(150 20% 90%); }
+[data-theme="sage-green"] .bg-slate-200{ background-color: hsl(148 16% 82%); }
+
+/* Hover surfaces */
+[data-theme="sage-green"] .hover\:bg-slate-50:hover  { background-color: hsl(150 18% 96%); }
+[data-theme="sage-green"] .hover\:bg-slate-100:hover { background-color: hsl(150 18% 92%); }
+[data-theme="sage-green"] .hover\:bg-red-50:hover    { background-color: hsl(0 55% 97%); }
+
+/* Text */
+[data-theme="sage-green"] .text-slate-900 { color: hsl(155 20% 11%); }
+[data-theme="sage-green"] .text-slate-800 { color: hsl(155 16% 18%); }
+[data-theme="sage-green"] .text-slate-700 { color: hsl(155 12% 28%); }
+[data-theme="sage-green"] .text-slate-600 { color: hsl(152 10% 38%); }
+[data-theme="sage-green"] .text-slate-500 { color: hsl(152 8% 48%); }
+[data-theme="sage-green"] .text-slate-400 { color: hsl(152 6% 60%); }
+
+/* Borders */
+[data-theme="sage-green"] .border-slate-200 { border-color: hsl(148 20% 84%); }
+[data-theme="sage-green"] .border-slate-100 { border-color: hsl(148 18% 90%); }
+
+/* Sidebar */
+[data-theme="sage-green"] aside                    { background-color: hsl(150 28% 90%); border-color: hsl(148 20% 82%); }
+[data-theme="sage-green"] aside .border-b          { border-color: hsl(148 20% 82%); }
+[data-theme="sage-green"] aside .border-t          { border-color: hsl(148 18% 86%); }
+[data-theme="sage-green"] aside .bg-slate-900      { background-color: hsl(152 40% 36%); }
+[data-theme="sage-green"] aside .text-slate-900    { color: hsl(155 20% 11%); }
+[data-theme="sage-green"] aside .bg-slate-100      { background-color: hsl(150 30% 82%); }
+[data-theme="sage-green"] aside .bg-slate-50       { background-color: transparent; }
+[data-theme="sage-green"] aside .text-slate-600    { color: hsl(152 10% 36%); }
+[data-theme="sage-green"] aside .text-slate-400    { color: hsl(152 8% 50%); }
+[data-theme="sage-green"] aside a:hover            { background-color: hsl(150 24% 84%); color: hsl(155 20% 11%); }
+
+/* Topbar */
+[data-theme="sage-green"] header                   { background-color: hsl(0 0% 100%); border-color: hsl(148 20% 84%); }
+[data-theme="sage-green"] header .text-slate-900   { color: hsl(155 20% 11%); }
+[data-theme="sage-green"] header .text-slate-500   { color: hsl(152 8% 48%); }
+[data-theme="sage-green"] header .text-slate-700   { color: hsl(155 12% 28%); }
+
+/* Theme picker chrome */
+[data-theme="sage-green"] .theme-icon,
+[data-theme="sage-green"] .theme-label { color: hsl(152 10% 46%); }
+
