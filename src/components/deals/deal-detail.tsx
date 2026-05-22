@@ -420,7 +420,10 @@ export function DealDetail({ transactionId }: { transactionId: string }) {
   });
 
   const updateStatus = trpc.transactions.updateStatus.useMutation({
-    onSuccess: () => utils.transactions.getById.invalidate({ id: transactionId }),
+    onSuccess: () => {
+      utils.transactions.getById.invalidate({ id: transactionId });
+      utils.transactions.list.invalidate();
+    },
   });
 
   if (isLoading) {
