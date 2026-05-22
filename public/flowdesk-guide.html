@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FlowDesk — User Guide</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --slate-50:  #f8fafc;
+      --slate-100: #f1f5f9;
+      --slate-200: #e2e8f0;
+      --slate-300: #cbd5e1;
+      --slate-400: #94a3b8;
+      --slate-500: #64748b;
+      --slate-600: #475569;
+      --slate-700: #334155;
+      --slate-800: #1e293b;
+      --slate-900: #0f172a;
+      --purple-50:  #faf5ff;
+      --purple-100: #f3e8ff;
+      --purple-500: #a855f7;
+      --purple-600: #9333ea;
+      --purple-700: #7e22ce;
+      --amber-50:  #fffbeb;
+      --amber-100: #fef3c7;
+      --amber-600: #d97706;
+      --amber-700: #b45309;
+      --green-50:  #f0fdf4;
+      --green-100: #dcfce7;
+      --green-600: #16a34a;
+      --green-700: #15803d;
+      --red-50:    #fef2f2;
+      --red-100:   #fee2e2;
+      --red-600:   #dc2626;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--slate-800);
+      background: var(--slate-50);
+    }
+
+    .page-wrap {
+      display: grid;
+      grid-template-columns: 240px 1fr;
+      min-height: 100vh;
+    }
+
+    /* ── Sidebar ── */
+    aside {
+      background: white;
+      border-right: 1px solid var(--slate-200);
+      padding: 32px 0;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow-y: auto;
+    }
+
+    .sidebar-logo { padding: 0 24px 24px; border-bottom: 1px solid var(--slate-100); margin-bottom: 20px; }
+    .sidebar-logo .product { font-size: 18px; font-weight: 700; color: var(--purple-600); letter-spacing: -0.3px; }
+    .sidebar-logo .sub { font-size: 11px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px; color: var(--slate-400); margin-top: 2px; }
+
+    .sidebar-back {
+      display: flex; align-items: center; gap: 6px;
+      padding: 0 24px 16px;
+      font-size: 12px; font-weight: 500; color: var(--slate-400);
+      text-decoration: none; transition: color 0.1s;
+    }
+    .sidebar-back:hover { color: var(--slate-600); }
+    .sidebar-back svg { width: 12px; height: 12px; }
+
+    .nav-section { padding: 0 16px; margin-bottom: 8px; }
+    .nav-section-label { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--slate-400); padding: 0 8px; margin-bottom: 4px; }
+    .nav-section a { display: flex; align-items: center; gap: 8px; padding: 6px 8px; border-radius: 6px; font-size: 13.5px; color: var(--slate-600); text-decoration: none; transition: background 0.1s, color 0.1s; }
+    .nav-section a:hover { background: var(--slate-100); color: var(--slate-900); }
+    .nav-section a.active { background: var(--purple-50); color: var(--purple-700); font-weight: 500; }
+    .nav-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: 0.4; flex-shrink: 0; }
+
+    /* ── Main ── */
+    main { padding: 56px 64px; max-width: 860px; }
+
+    /* ── Hero ── */
+    .hero { margin-bottom: 48px; padding-bottom: 40px; border-bottom: 1px solid var(--slate-200); }
+
+    .hero-eyebrow {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.8px;
+      color: var(--purple-600); background: var(--purple-50); border: 1px solid var(--purple-100);
+      border-radius: 999px; padding: 3px 12px; margin-bottom: 16px;
+    }
+
+    .hero h1 { font-size: 36px; font-weight: 800; color: var(--slate-900); letter-spacing: -0.8px; line-height: 1.15; margin-bottom: 14px; }
+    .hero p { font-size: 16px; color: var(--slate-500); max-width: 560px; line-height: 1.7; }
+
+    /* ── Sections ── */
+    section { margin-bottom: 52px; scroll-margin-top: 32px; }
+    h2 { font-size: 22px; font-weight: 700; color: var(--slate-900); letter-spacing: -0.4px; margin-bottom: 6px; }
+    .section-intro { color: var(--slate-500); font-size: 14.5px; margin-bottom: 24px; }
+    h3 { font-size: 14px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; color: var(--slate-500); margin: 28px 0 12px; }
+    p { margin-bottom: 12px; color: var(--slate-600); }
+
+    /* ── Layout diagram ── */
+    .layout-diagram {
+      display: grid;
+      grid-template-columns: 2fr 3fr;
+      gap: 0;
+      border: 1px solid var(--slate-200);
+      border-radius: 12px;
+      overflow: hidden;
+      margin: 20px 0;
+      background: white;
+    }
+
+    .layout-pane {
+      padding: 16px;
+    }
+
+    .layout-pane + .layout-pane {
+      border-left: 1px solid var(--slate-200);
+    }
+
+    .pane-label {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.8px;
+      color: var(--slate-400);
+      margin-bottom: 10px;
+    }
+
+    .mock-tabs {
+      display: flex;
+      gap: 4px;
+      margin-bottom: 12px;
+    }
+
+    .mock-tab {
+      padding: 4px 12px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--slate-500);
+      background: var(--slate-100);
+    }
+
+    .mock-tab.active { background: white; color: var(--slate-900); box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+
+    .mock-task {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      padding: 8px;
+      border-radius: 6px;
+      margin-bottom: 4px;
+    }
+
+    .mock-task:hover { background: var(--slate-50); }
+
+    .mock-checkbox {
+      width: 14px; height: 14px;
+      border: 1.5px solid var(--slate-300);
+      border-radius: 3px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    .mock-task-title { font-size: 12px; font-weight: 500; color: var(--slate-800); }
+    .mock-task-addr  { font-size: 11px; color: var(--slate-400); margin-top: 1px; }
+    .mock-task-date  { font-size: 11px; font-weight: 500; color: var(--slate-400); margin-left: auto; flex-shrink: 0; }
+    .mock-task-date.overdue { color: var(--red-600); }
+
+    /* Chat side */
+    .chat-header { font-size: 12px; font-weight: 600; color: var(--slate-700); margin-bottom: 2px; }
+    .chat-sub    { font-size: 11px; color: var(--slate-400); margin-bottom: 12px; }
+
+    .chat-bubble {
+      max-width: 85%;
+      padding: 8px 12px;
+      border-radius: 14px;
+      font-size: 12px;
+      line-height: 1.5;
+      margin-bottom: 8px;
+    }
+
+    .bubble-ai   { background: var(--slate-100); color: var(--slate-800); border-bottom-left-radius: 3px; }
+    .bubble-user { background: var(--slate-900); color: white; border-bottom-right-radius: 3px; margin-left: auto; }
+
+    .chat-row { display: flex; }
+    .chat-row.user { justify-content: flex-end; }
+
+    /* ── Steps ── */
+    .steps { display: flex; flex-direction: column; gap: 16px; }
+    .step { display: flex; gap: 16px; background: white; border: 1px solid var(--slate-200); border-radius: 12px; padding: 20px; }
+    .step-num { flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%; background: var(--purple-600); color: white; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; }
+    .step-body strong { display: block; font-size: 15px; font-weight: 600; color: var(--slate-800); margin-bottom: 4px; }
+    .step-body p { margin: 0; font-size: 14px; color: var(--slate-500); line-height: 1.55; }
+
+    /* ── Callouts ── */
+    .callout { display: flex; gap: 12px; padding: 16px; border-radius: 10px; margin: 20px 0; font-size: 14px; }
+    .callout-icon { font-size: 18px; flex-shrink: 0; line-height: 1.4; }
+    .callout-tip  { background: var(--purple-50);   border: 1px solid var(--purple-100);   color: var(--purple-700); }
+    .callout-warn { background: var(--amber-50);  border: 1px solid var(--amber-100);  color: var(--amber-700); }
+    .callout-note { background: var(--slate-100); border: 1px solid var(--slate-200);  color: var(--slate-700); }
+    .callout strong { display: block; margin-bottom: 3px; }
+
+    /* ── Prompt examples ── */
+    .prompt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 16px 0;
+    }
+
+    .prompt-card {
+      background: white;
+      border: 1px solid var(--slate-200);
+      border-radius: 10px;
+      padding: 14px;
+    }
+
+    .prompt-category {
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.6px;
+      color: var(--purple-600);
+      margin-bottom: 8px;
+    }
+
+    .prompt-example {
+      font-size: 12.5px;
+      color: var(--slate-700);
+      background: var(--slate-50);
+      border: 1px solid var(--slate-200);
+      border-radius: 6px;
+      padding: 7px 10px;
+      margin-bottom: 6px;
+      font-style: italic;
+    }
+
+    .prompt-example:last-child { margin-bottom: 0; }
+
+    /* ── Keyboard shortcut ── */
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      font-size: 11px;
+      font-family: ui-monospace, monospace;
+      background: var(--slate-100);
+      border: 1px solid var(--slate-200);
+      border-bottom-width: 2px;
+      border-radius: 5px;
+      padding: 2px 7px;
+      color: var(--slate-700);
+    }
+
+    /* ── Context table ── */
+    .context-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+      margin: 16px 0;
+    }
+
+    .context-table th {
+      text-align: left; padding: 8px 12px;
+      background: var(--slate-100); color: var(--slate-600);
+      font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+
+    .context-table th:first-child { border-radius: 8px 0 0 8px; }
+    .context-table th:last-child  { border-radius: 0 8px 8px 0; }
+
+    .context-table td { padding: 10px 12px; border-bottom: 1px solid var(--slate-100); color: var(--slate-600); vertical-align: top; }
+    .context-table td:first-child { font-weight: 500; color: var(--slate-800); }
+
+    .yes { color: var(--green-600); font-weight: 600; }
+    .no  { color: var(--slate-400); }
+
+    /* ── Footer ── */
+    footer { margin-top: 64px; padding-top: 24px; border-top: 1px solid var(--slate-200); font-size: 13px; color: var(--slate-400); display: flex; justify-content: space-between; }
+
+    @media print {
+      aside { display: none; }
+      .page-wrap { grid-template-columns: 1fr; }
+      main { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrap">
+
+  <aside>
+    <div class="sidebar-logo">
+      <div class="product">FlowDesk</div>
+      <div class="sub">User Guide</div>
+    </div>
+
+    <a href="guide.html" class="sidebar-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      All guides
+    </a>
+
+    <div class="nav-section">
+      <div class="nav-section-label">FlowDesk</div>
+      <a href="#overview"><span class="nav-dot"></span> Overview</a>
+      <a href="#layout"><span class="nav-dot"></span> Layout</a>
+      <a href="#task-queue"><span class="nav-dot"></span> Task Queue</a>
+      <a href="#ai-chat"><span class="nav-dot"></span> AI Chat</a>
+      <a href="#prompts"><span class="nav-dot"></span> Example Prompts</a>
+      <a href="#context"><span class="nav-dot"></span> What the AI Knows</a>
+    </div>
+  </aside>
+
+  <main>
+
+    <div class="hero" id="overview">
+      <div class="hero-eyebrow">BrokerOS Module</div>
+      <h1>FlowDesk</h1>
+      <p>Your AI-powered command centre. FlowDesk combines a live task queue across all your open deals with a Claude-powered assistant that understands your brokerage's current transactions — so you can get answers, draft emails, and stay on top of your workload without switching contexts.</p>
+    </div>
+
+    <!-- Layout -->
+    <section id="layout">
+      <h2>Layout</h2>
+      <p class="section-intro">FlowDesk is a split-panel view. The task queue lives on the left and the AI assistant on the right.</p>
+
+      <div class="layout-diagram">
+        <div class="layout-pane">
+          <div class="pane-label">Task Queue</div>
+          <div class="mock-tabs">
+            <div class="mock-tab active">Open (3)</div>
+            <div class="mock-tab">Completed</div>
+          </div>
+          <div class="mock-task">
+            <div class="mock-checkbox"></div>
+            <div style="flex:1;">
+              <div class="mock-task-title">Order home inspection</div>
+              <div class="mock-task-addr">456 Maple Ave</div>
+            </div>
+            <div class="mock-task-date overdue">May 19</div>
+          </div>
+          <div class="mock-task">
+            <div class="mock-checkbox"></div>
+            <div style="flex:1;">
+              <div class="mock-task-title">Send purchase agreement</div>
+              <div class="mock-task-addr">123 Oak St</div>
+            </div>
+            <div class="mock-task-date">Today</div>
+          </div>
+          <div class="mock-task">
+            <div class="mock-checkbox"></div>
+            <div style="flex:1;">
+              <div class="mock-task-title">Follow up with lender</div>
+              <div class="mock-task-addr">789 Pine Rd</div>
+            </div>
+            <div class="mock-task-date">Tomorrow</div>
+          </div>
+        </div>
+        <div class="layout-pane">
+          <div class="chat-header">AI Assistant</div>
+          <div class="chat-sub">Powered by Claude — aware of your open deals</div>
+          <div class="chat-row">
+            <div class="chat-bubble bubble-ai">Hi! I'm your BrokerOS AI assistant. I can help you draft emails, summarize deals, and answer questions about your transactions.</div>
+          </div>
+          <div class="chat-row user">
+            <div class="chat-bubble bubble-user">Draft a follow-up email to the buyer's lender on 456 Maple Ave</div>
+          </div>
+          <div class="chat-row">
+            <div class="chat-bubble bubble-ai">Here's a follow-up email for the lender on 456 Maple Ave…</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Task Queue -->
+    <section id="task-queue">
+      <h2>Task Queue</h2>
+      <p class="section-intro">The task queue shows every task across all your open deals in one place, sorted by due date so the most urgent items are always at the top.</p>
+
+      <h3>Open tab</h3>
+      <p>Lists all incomplete tasks from every deal. Each row shows the task title, the property address it belongs to, and its due date. Tasks that are past due are highlighted in red. The tab label shows the total count — <em>Open (3)</em> — so you can see your workload at a glance without clicking in.</p>
+
+      <h3>Completed tab</h3>
+      <p>Lists all tasks that have been checked off, sorted by completion date (most recent first). The completion date is shown in place of the due date.</p>
+
+      <h3>Completing a task</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Click the checkbox next to any open task.</strong>
+            <p>The task is immediately marked complete with an optimistic update — the UI updates before the server responds so there's no perceived lag.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>The task moves to the Completed tab.</strong>
+            <p>Both tabs refresh automatically. The open count in the tab label decreases.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-note">
+        <div class="callout-icon">ℹ️</div>
+        <div><strong>Tasks are created on deal detail pages.</strong> To add a new task, navigate to the relevant deal via <strong>DealPulse → Deals</strong>, open the deal, and use the Tasks section. The task will appear in FlowDesk's queue automatically.</div>
+      </div>
+    </section>
+
+    <!-- AI Chat -->
+    <section id="ai-chat">
+      <h2>AI Chat</h2>
+      <p class="section-intro">The right panel is a live chat with Claude, Anthropic's AI model. It starts with context about your current open deals so you can ask deal-specific questions without re-explaining everything.</p>
+
+      <h3>Sending a message</h3>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">1</div>
+          <div class="step-body">
+            <strong>Type your message in the input at the bottom.</strong>
+            <p>The input expands as you type, up to a maximum height. Shift+Enter adds a line break without sending.</p>
+          </div>
+        </div>
+        <div class="step">
+          <div class="step-num">2</div>
+          <div class="step-body">
+            <strong>Press <span class="kbd">Enter</span> or click the send button.</strong>
+            <p>The assistant's response streams in word-by-word. A pulsing indicator shows when the AI is thinking.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout callout-tip">
+        <div class="callout-icon">💡</div>
+        <div><strong>The AI already knows your open deals.</strong> You don't need to paste in addresses or prices — just refer to properties by address and the assistant will use the context it already has. See <a href="#context">What the AI Knows</a> for details.</div>
+      </div>
+
+      <h3>Conversation history</h3>
+      <p>The chat starts fresh each time you load FlowDesk. Your conversation history is not saved between sessions — the AI remembers everything within the current page visit but not across navigations or page reloads.</p>
+    </section>
+
+    <!-- Prompts -->
+    <section id="prompts">
+      <h2>Example Prompts</h2>
+      <p class="section-intro">The assistant is tuned for real estate workflows. Here are the kinds of tasks it handles well.</p>
+
+      <div class="prompt-grid">
+        <div class="prompt-card">
+          <div class="prompt-category">Email drafting</div>
+          <div class="prompt-example">"Draft a follow-up email to the buyer's lender on 456 Maple Ave asking for a financing update"</div>
+          <div class="prompt-example">"Write a friendly check-in to the seller at 123 Oak St about the inspection results"</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-category">Deal questions</div>
+          <div class="prompt-example">"Which of my deals are at high risk right now?"</div>
+          <div class="prompt-example">"What's the status of the Maple Ave deal?"</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-category">Task suggestions</div>
+          <div class="prompt-example">"What should I be doing this week to keep my deals on track?"</div>
+          <div class="prompt-example">"What are the typical next steps after going under contract?"</div>
+        </div>
+        <div class="prompt-card">
+          <div class="prompt-category">General knowledge</div>
+          <div class="prompt-example">"Explain what an earnest money release looks like in Texas"</div>
+          <div class="prompt-example">"What contingencies should I push for in a seller's market?"</div>
+        </div>
+      </div>
+
+      <div class="callout callout-warn">
+        <div class="callout-icon">⚠️</div>
+        <div><strong>Always review AI-generated emails before sending.</strong> The assistant produces drafts — treat them as a strong starting point, not a finished product. Verify all deal-specific details (dates, names, amounts) are correct before use.</div>
+      </div>
+    </section>
+
+    <!-- Context -->
+    <section id="context">
+      <h2>What the AI Knows</h2>
+      <p class="section-intro">When you open FlowDesk the assistant is automatically loaded with a snapshot of your brokerage's open deals. Here's exactly what it can and can't see.</p>
+
+      <table class="context-table">
+        <thead>
+          <tr><th>Data</th><th>Available to AI</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Property address</td><td class="yes">Yes</td></tr>
+          <tr><td>Deal status (Active, Under Contract, etc.)</td><td class="yes">Yes</td></tr>
+          <tr><td>Close date</td><td class="yes">Yes</td></tr>
+          <tr><td>Risk score (Low / Medium / High)</td><td class="yes">Yes</td></tr>
+          <tr><td>List price</td><td class="yes">Yes</td></tr>
+          <tr><td>Parties (buyer, seller, agent names)</td><td class="no">Not yet</td></tr>
+          <tr><td>Contingency deadlines</td><td class="no">Not yet</td></tr>
+          <tr><td>Tasks</td><td class="no">Not yet</td></tr>
+          <tr><td>Documents</td><td class="no">Not yet</td></tr>
+          <tr><td>Closed or cancelled deals</td><td class="no">Excluded</td></tr>
+        </tbody>
+      </table>
+
+      <p>The AI snapshot covers up to your 10 most recent open deals. If you have more than 10 active transactions the oldest ones may not be included in the context.</p>
+
+      <div class="callout callout-note">
+        <div class="callout-icon">ℹ️</div>
+        <div>For questions about specific parties, deadlines, or tasks, open the deal detail page in DealPulse and copy the relevant details into the chat. Deeper AI context (parties, deadlines, tasks) is planned for a future release.</div>
+      </div>
+    </section>
+
+    <footer>
+      <span>BrokerOS — FlowDesk User Guide</span>
+      <span>Last updated May 2026</span>
+    </footer>
+
+  </main>
+</div>
+
+<script>
+  const navLinks = document.querySelectorAll(".nav-section a");
+  const sectionIds = ["overview","layout","task-queue","ai-chat","prompts","context"];
+
+  function setActive(id) {
+    navLinks.forEach((a) => {
+      a.classList.toggle("active", a.getAttribute("href") === "#" + id);
+    });
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible.length) setActive(visible[0].target.id);
+    },
+    { rootMargin: "0px 0px -60% 0px", threshold: 0 }
+  );
+
+  sectionIds.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) observer.observe(el);
+  });
+
+  const initial = location.hash ? location.hash.slice(1) : "overview";
+  setActive(initial);
+</script>
+
+</body>
+</html>

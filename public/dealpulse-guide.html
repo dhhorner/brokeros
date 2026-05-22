@@ -76,6 +76,20 @@
       letter-spacing: -0.3px;
     }
 
+    .sidebar-back {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 0 24px 16px;
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--slate-400);
+      text-decoration: none;
+      transition: color 0.1s;
+    }
+    .sidebar-back:hover { color: var(--slate-600); }
+    .sidebar-back svg { width: 12px; height: 12px; }
+
     .sidebar-logo .sub {
       font-size: 11px;
       font-weight: 600;
@@ -547,9 +561,14 @@
   <!-- Sidebar -->
   <aside>
     <div class="sidebar-logo">
-      <div class="product">BrokerOS</div>
+      <div class="product">DealPulse</div>
       <div class="sub">User Guide</div>
     </div>
+
+    <a href="guide.html" class="sidebar-back">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+      All guides
+    </a>
 
     <div class="nav-section">
       <div class="nav-section-label">DealPulse</div>
