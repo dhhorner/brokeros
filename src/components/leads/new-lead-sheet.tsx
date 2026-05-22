@@ -48,7 +48,7 @@ type NewLeadFormValues = z.infer<typeof newLeadFormSchema>;
 const STATUSES = ["NEW", "CONTACTED", "QUALIFIED", "NURTURING", "CLOSED_WON", "CLOSED_LOST"] as const;
 const SOURCES = ["MANUAL", "MLS", "WEBSITE", "REFERRAL", "SOCIAL", "OTHER"] as const;
 
-export function NewLeadSheet({ onCreated }: { onCreated?: () => void }) {
+export function NewLeadSheet() {
   const [open, setOpen] = useState(false);
   const utils = trpc.useUtils();
 
@@ -57,7 +57,6 @@ export function NewLeadSheet({ onCreated }: { onCreated?: () => void }) {
       utils.leads.list.invalidate();
       setOpen(false);
       form.reset();
-      onCreated?.();
     },
   });
 

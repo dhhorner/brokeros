@@ -28,4 +28,3 @@ export const suggestTasksResponseSchema = z.object({
 export type DraftEmailInput = z.infer<typeof draftEmailSchema>;
 export type SummarizeDealInput = z.infer<typeof summarizeDealSchema>;
 export type SuggestTasksInput = z.infer<typeof suggestTasksSchema>;
-export type SuggestedTask = z.infer<typeof suggestedTaskSchema>;

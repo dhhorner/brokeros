@@ -49,6 +49,3 @@ export const completeTaskSchema = z.object({
   id: z.string().cuid(),
 });
 
-export type CreateTransactionInput = z.infer<typeof createTransactionSchema>;
-export type CreateDeadlineInput = z.infer<typeof createDeadlineSchema>;
-export type CreateTaskInput = z.infer<typeof createTaskSchema>;

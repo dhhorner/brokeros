@@ -14,7 +14,6 @@ export function createNurtureEmailWorker(connection: IORedis) {
       );
 
       // TODO: fetch sequence config, render email template, send via Resend
-      // const { data, error } = await resend.emails.send({ ... });
 
       return { sent: true, sequenceId, leadId, step };
     },
